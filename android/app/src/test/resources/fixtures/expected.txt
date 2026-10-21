@@ -13,6 +13,9 @@ vowel_prolongation strong 23532 prolongation
 block_strain gentle 25040 block
 block_strain full 22960 block
 block_strain strong 22193 block
-sound_repetition gentle 27920 repetition
-sound_repetition full 22320 repetition
-sound_repetition strong 22320 repetition
+word_repetition gentle 42080 -
+word_repetition full 32080 repetition
+word_repetition strong 32080 repetition
+sound_repetition gentle 27860 repetition,repetition
+sound_repetition full 22320 repetition,repetition
+sound_repetition strong 22320 repetition,repetition

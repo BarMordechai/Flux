@@ -114,3 +114,10 @@ def test_pipeline_uses_transcript_for_word_repetitions():
     res = process(x, SR, Settings(mode="full", vad="energy"), transcriber=lambda *_: words)
     assert "repetition" in kinds(res)
     assert abs((len(x) - len(res.audio)) / SR - (d + GAP)) < 0.05
+
+
+def test_whole_word_repetition_without_transcript():
+    x = join(silence(0.2), W1(), silence(0.15), W1(), silence(0.15), W2(), silence(GAP), W3(), silence(0.2))
+    res = process(x, SR, Settings(mode="full", vad="energy"))
+    assert "repetition" in kinds(res)
+    assert abs((len(x) - len(res.audio)) / SR - (len(W1()) / SR + 0.15)) < 0.05

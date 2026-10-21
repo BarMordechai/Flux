@@ -33,11 +33,13 @@ class ModeSettings:
     word_gap_max: float = 0.5  # longest gap between a word and its repeat (s)
 
 
+# Calibrated on SEP-28k (tools/calibrate_sep28k.py, 40 episodes / 2,799 clips). Fields after the first seven:
+# fragment_max, fragment_gap_max, fragment_sim_db, steady_db, word_dtw_db, word_max, word_gap_max.
 MODES = {
-    "gentle": ModeSettings(0.45, 0.20, 0.35, 0.25, 1.6, 0.9, True),
-    "full": ModeSettings(0.30, 0.12, 0.25, 0.12, 1.0, 0.55, False),
+    "gentle": ModeSettings(0.30, 0.20, 0.35, 0.25, 1.6, 0.9, True, 0.35, 0.6, 4.0, 2.8, 3.0, 0.8, 0.5),
+    "full": ModeSettings(0.22, 0.12, 0.25, 0.12, 1.0, 0.55, False, 0.25, 0.4, 5.5, 2.8, 3.0, 0.8, 0.8),
     # Strong: looser detectors and harder compression, for users who prefer fewer misses over naturalness.
-    "strong": ModeSettings(0.22, 0.08, 0.18, 0.08, 0.7, 0.4, False, 0.45, 0.8, 5.5, 2.8),
+    "strong": ModeSettings(0.22, 0.08, 0.18, 0.08, 0.7, 0.4, False, 0.35, 0.6, 5.5, 3.4, 3.5, 0.8, 0.8),
 }
 
 

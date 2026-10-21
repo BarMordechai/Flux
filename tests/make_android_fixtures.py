@@ -27,6 +27,8 @@ CASES = {
     "block_strain": lambda: join(silence(0.2), W1(), silence(G),
                                  (0.0015 * np.random.default_rng(1).standard_normal(int(1.2 * SR))).astype(np.float32),
                                  W2(), silence(0.2)),
+    "word_repetition": lambda: join(silence(0.2), W1(), silence(0.15), W1(), silence(0.15), W2(), silence(G), W3(),
+                                    silence(0.2)),
     "sound_repetition": lambda: join(silence(0.2), W1(), silence(G), frag(), silence(0.18), frag(), silence(0.18), frag(),
                                      silence(0.18), W2(), silence(0.2)),
 }

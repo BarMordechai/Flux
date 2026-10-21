@@ -3,6 +3,7 @@ package app.shetef.dsp
 import kotlin.math.abs
 
 /** Acoustic stutter detection: repetitions, prolongations, blocks. Mirrors fluency/detect.py. */
+// Calibrated on SEP-28k (tools/calibrate_sep28k.py); keep in sync with MODES in fluency/detect.py.
 enum class Mode(
     val prolongMin: Double,
     val prolongKeep: Double,
@@ -11,15 +12,18 @@ enum class Mode(
     val pauseMax: Double,
     val pauseKeep: Double,
     val keepOneRepetition: Boolean,
-    val fragmentMax: Double = 0.35,
-    val fragmentGapMax: Double = 0.6,
-    val fragmentSimDb: Double = 4.0,
-    val steadyDb: Double = 2.2,
+    val fragmentMax: Double,
+    val fragmentGapMax: Double,
+    val fragmentSimDb: Double,
+    val steadyDb: Double,
+    val wordDtwDb: Double,
+    val wordMax: Double,
+    val wordGapMax: Double,
 ) {
-    GENTLE(0.45, 0.20, 0.35, 0.25, 1.6, 0.9, true),
-    FULL(0.30, 0.12, 0.25, 0.12, 1.0, 0.55, false),
+    GENTLE(0.30, 0.20, 0.35, 0.25, 1.6, 0.9, true, 0.35, 0.6, 4.0, 2.8, 3.0, 0.8, 0.5),
+    FULL(0.22, 0.12, 0.25, 0.12, 1.0, 0.55, false, 0.25, 0.4, 5.5, 2.8, 3.0, 0.8, 0.8),
     // Looser detectors and harder compression: fewer misses, less natural.
-    STRONG(0.22, 0.08, 0.18, 0.08, 0.7, 0.4, false, 0.45, 0.8, 5.5, 2.8),
+    STRONG(0.22, 0.08, 0.18, 0.08, 0.7, 0.4, false, 0.35, 0.6, 5.5, 3.4, 3.5, 0.8, 0.8),
 }
 
 enum class Kind { REPETITION, PROLONGATION, BLOCK, PAUSE, EDGE }
@@ -77,6 +81,65 @@ object Detect {
             } else regions[last + 1].first
             val a = f.t(regions[first].first)
             events.add(Event(Kind.REPETITION, a, f.t(regions[last + 1].first), a, f.t(cutEnd), "${chain.size} fragment(s)"))
+        }
+        return events
+    }
+
+    /** Open-end DTW: how well spectral-shape sequence a matches the start of b (mean dB per band). */
+    fun dtwDistance(f: Features, aStart: Int, aEnd: Int, bStart: Int, bEnd: Int, minRatio: Double = 0.7): Double {
+        val n = aEnd - aStart
+        val m = bEnd - bStart
+        val bands = Features.N_MELS
+        fun shape(t: Int): DoubleArray {
+            val row = f.logmel[t]
+            val mean = row.average()
+            return DoubleArray(bands) { row[it] - mean }
+        }
+        val a = Array(n) { shape(aStart + it) }
+        val b = Array(m) { shape(bStart + it) }
+        val inf = Double.POSITIVE_INFINITY
+        var prev = DoubleArray(m + 1) { if (it == 0) 0.0 else inf }
+        for (i in 1..n) {
+            val cur = DoubleArray(m + 1) { inf }
+            for (j in 1..m) {
+                var c = 0.0
+                val ai = a[i - 1]
+                val bj = b[j - 1]
+                for (k in 0 until bands) c += abs(ai[k] - bj[k])
+                cur[j] = c / bands + minOf(prev[j], cur[j - 1], prev[j - 1])
+            }
+            prev = cur
+        }
+        var best = inf
+        for (j in maxOf(1, (minRatio * n).toInt())..m) best = minOf(best, prev[j] / (n + j))
+        return best
+    }
+
+    fun wordRepetitions(f: Features, regions: List<Pair<Int, Int>>, cfg: DetectConfig): List<Event> {
+        val m = cfg.mode
+        if (m.wordDtwDb <= 0) return emptyList()
+        fun repeats(i: Int): Boolean {
+            if (i + 1 >= regions.size) return false
+            val (s, e) = regions[i]
+            val (ns, ne) = regions[i + 1]
+            val dur = f.t(e - s)
+            if (dur < 0.12 || dur > m.wordMax || f.t(ns - e) > m.wordGapMax) return false
+            val n = e - s
+            if (ne - ns < (0.7 * n).toInt()) return false
+            val bEnd = minOf(ne, ns + (1.4 * n).toInt())
+            return dtwDistance(f, s, e, ns, bEnd) < m.wordDtwDb
+        }
+
+        val events = ArrayList<Event>()
+        for (chain in chains(regions.size, ::repeats)) {
+            val first = chain.first()
+            val last = chain.last()
+            val cutEnd = if (m.keepOneRepetition) {
+                if (chain.size < 2) continue
+                regions[last].first
+            } else regions[last + 1].first
+            val a = f.t(regions[first].first)
+            events.add(Event(Kind.REPETITION, a, f.t(regions[last + 1].first), a, f.t(cutEnd), "${chain.size} word repeat(s)"))
         }
         return events
     }
@@ -142,6 +205,7 @@ object Detect {
         val regions = Vad.runs(mask)
         val events = ArrayList<Event>()
         events += acousticRepetitions(f, regions, cfg)
+        events += wordRepetitions(f, regions, cfg)
         events += prolongations(f, mask, regions, cfg)
         events += gaps(f, regions, events, cfg)
         return events.sortedBy { it.start }

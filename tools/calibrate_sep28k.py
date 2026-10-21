@@ -26,13 +26,14 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from fluency import features as feat  # noqa: E402
-from fluency.detect import MODES, DetectConfig, acoustic_repetitions, detect, gaps, prolongations  # noqa: E402
+from fluency.detect import MODES, DetectConfig, acoustic_repetitions, detect, gaps, prolongations, word_repetitions  # noqa: E402
 from fluency.vad import energy_vad, runs  # noqa: E402
 
 BASE = "https://raw.githubusercontent.com/apple/ml-stuttering-events-dataset/main/"
 SR = 16000
 CLASSES = ["Prolongation", "Block", "SoundRep", "WordRep", "Interjection"]
-DETECTS = {"prolongation": ["Prolongation"], "block": ["Block"], "repetition": ["SoundRep", "WordRep"]}
+DETECTS = {"prolongation": ["Prolongation"], "block": ["Block"], "repetition": ["SoundRep", "WordRep"],
+           "word_repetition": ["WordRep", "SoundRep"]}
 
 # Parameter grids, one per detector (each detector only reads its own parameters).
 GRID = {
@@ -42,6 +43,7 @@ GRID = {
         "fragment_max": [0.25, 0.35, 0.45, 0.6],
         "fragment_gap_max": [0.4, 0.6, 0.8, 1.0],
     },
+    "word_repetition": {"word_dtw_db": [2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0], "word_max": [0.5, 0.8], "word_gap_max": [0.3, 0.5, 0.8]},
     "block": {"block_min": [0.12, 0.18, 0.25, 0.35], "strain_margin_db": [3.0, 4.5, 6.0, 8.0]},
 }
 
@@ -80,13 +82,15 @@ def clip_labels(rows):
 MODE_FIELDS = {f.name for f in fields(MODES["full"])}
 
 
-def detect_kind(kind, f, mask, regions, params):
+def detect_kind(kind, f, mask, regions, params, cache=None):
     mode = replace(MODES["full"], **{k: v for k, v in params.items() if k in MODE_FIELDS})
     cfg = DetectConfig(mode="full", custom=mode, **{k: v for k, v in params.items() if k not in MODE_FIELDS})
     if kind == "prolongation":
         return prolongations(f, mask, regions, cfg)
     if kind == "repetition":
         return acoustic_repetitions(f, regions, cfg)
+    if kind == "word_repetition":
+        return word_repetitions(f, regions, cfg, cache)
     reps = acoustic_repetitions(f, regions, cfg) + prolongations(f, mask, regions, cfg)
     return [e for e in gaps(f, mask, regions, reps, None, cfg) if e.kind == "block"]
 
@@ -141,15 +145,16 @@ def main():
         f = feat.compute(x, SR)
         mask = energy_vad(f)
         regions = runs(mask)
+        dtw_cache = {}
         for kind, grid in GRID.items():
             keys = list(grid)
             for values in itertools.product(*grid.values()):
                 params = dict(zip(keys, values))
-                hits[(kind, json.dumps(params, sort_keys=True))] += score(detect_kind(kind, f, mask, regions, params), clips)
+                hits[(kind, json.dumps(params, sort_keys=True))] += score(detect_kind(kind, f, mask, regions, params, dtw_cache), clips)
         for m in MODES:
             evs = [e for e in detect(x, SR, mask, f, None, DetectConfig(mode=m)) if e.kind not in ("edge", "pause")]
             hits[("mode:" + m, "any")] += score(evs, clips)
-            for kind in DETECTS:
+            for kind in ("prolongation", "block", "repetition"):
                 hits[("mode:" + m, kind)] += score([e for e in evs if e.kind == kind], clips)
         all_clips += clips
         used.append(f"{show}/{ep}")
@@ -162,7 +167,8 @@ def main():
     for m in MODES:
         h_any = np.array(hits[("mode:" + m, "any")])
         row = {"mode": m, "false_positive_rate": float(h_any[fluent].mean()) if fluent.any() else None}
-        for kind, cls in DETECTS.items():
+        for kind in ("prolongation", "block", "repetition"):
+            cls = DETECTS[kind]
             h = np.array(hits[("mode:" + m, kind)])
             for c in cls:
                 row[f"recall_{c}"] = float(h[pos[c]].mean()) if pos[c].any() else None

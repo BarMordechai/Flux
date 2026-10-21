@@ -28,6 +28,9 @@ class ModeSettings:
     fragment_gap_max: float = 0.6  # longest gap between a fragment and its repeat (s)
     fragment_sim_db: float = 4.0  # spectral distance below which a fragment matches the next onset
     steady_db: float = 2.2  # spectral change below which a frame counts as a steady sound (calibrate on real data)
+    word_dtw_db: float = 0.0  # DTW distance below which a word-length chunk repeats the next one; 0 disables
+    word_max: float = 0.8  # longest chunk checked as a repeated word (s)
+    word_gap_max: float = 0.5  # longest gap between a word and its repeat (s)
 
 
 MODES = {
@@ -134,6 +137,61 @@ def acoustic_repetitions(f: feat.Features, regions, cfg: DetectConfig) -> list[E
             cut_end = regions[last + 1][0]
         a, b = sec(regions[first][0]), sec(cut_end)
         events.append(Event("repetition", a, sec(regions[last + 1][0]), (a, b), "acoustic", f"{len(chain)} fragment(s)"))
+    return events
+
+
+def dtw_distance(a: np.ndarray, b: np.ndarray, min_ratio: float = 0.7) -> float:
+    """Open-end DTW between spectral-shape sequences: how well `a` matches the start of `b` (mean dB/band)."""
+    a = a - a.mean(axis=1, keepdims=True)
+    b = b - b.mean(axis=1, keepdims=True)
+    n, m = len(a), len(b)
+    cost = np.abs(a[:, None, :] - b[None, :, :]).mean(axis=2)
+    d = np.full((n + 1, m + 1), np.inf)
+    d[0, 0] = 0.0
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            d[i, j] = cost[i - 1, j - 1] + min(d[i - 1, j], d[i, j - 1], d[i - 1, j - 1])
+    lo = max(1, int(min_ratio * n))
+    j = np.arange(lo, m + 1)
+    return float(np.min(d[n, lo:] / (n + j))) if len(j) else np.inf
+
+
+def word_repetitions(f: feat.Features, regions, cfg: DetectConfig, cache: dict | None = None) -> list[Event]:
+    """Whole-word repetitions ("אני, אני רוצה"): a chunk of speech whose spectral sequence the next chunk repeats."""
+    m = cfg.m
+    if m.word_dtw_db <= 0:
+        return []
+
+    def repeats(i: int) -> bool:
+        if i + 1 >= len(regions):
+            return False
+        (s, e), (ns, ne) = regions[i], regions[i + 1]
+        dur = f.t(e - s)
+        if not (0.12 <= dur <= m.word_max) or f.t(ns - e) > m.word_gap_max:
+            return False
+        n = e - s
+        if ne - ns < int(0.7 * n):
+            return False
+        b_end = min(ne, ns + int(1.4 * n))
+        key = (s, e, ns, b_end)
+        if cache is None or key not in cache:
+            dist = dtw_distance(f.logmel[s:e], f.logmel[ns:b_end])
+            if cache is None:
+                return dist < m.word_dtw_db
+            cache[key] = dist
+        return cache[key] < m.word_dtw_db
+
+    events = []
+    for chain in _chains(regions, repeats):
+        first, last = chain[0], chain[-1]
+        if m.keep_one_repetition:
+            if len(chain) < 2:
+                continue
+            cut_end = regions[last][0]
+        else:
+            cut_end = regions[last + 1][0]
+        a = f.t(regions[first][0])
+        events.append(Event("repetition", a, f.t(regions[last + 1][0]), (a, f.t(cut_end)), "acoustic", f"{len(chain)} word repeat(s)"))
     return events
 
 
@@ -251,6 +309,7 @@ def gaps(f: feat.Features, mask, regions, events, words, cfg: DetectConfig) -> l
 def detect(x: np.ndarray, sr: int, mask: np.ndarray, f: feat.Features, words: list[Word] | None, cfg: DetectConfig):
     regions = runs(mask)
     events = acoustic_repetitions(f, regions, cfg)
+    events += word_repetitions(f, regions, cfg)
     events += prolongations(f, mask, regions, cfg)
     if words:
         events += transcript_repetitions(words, cfg)

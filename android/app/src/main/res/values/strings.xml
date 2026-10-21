@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">שטף</string>
+    <string name="tagline">מקליטים הודעה, האפליקציה מחליקה חזרות, הארכות וחסימות בקול שלך, ושולחים לוואטסאפ. הכל קורה על הטלפון, בלי אינטרנט.</string>
+    <string name="mode_gentle">החלקה עדינה</string>
+    <string name="mode_full">החלקה מלאה</string>
+    <string name="mode_gentle_hint">משאירה מעט חוסר שטף טבעי, כדי שההודעה תישמע כמוך.</string>
+    <string name="mode_full_hint">מסירה כמה שיותר חזרות, הארכות וחסימות.</string>
+    <string name="record">הקלטה</string>
+    <string name="stop">עצירה</string>
+    <string name="pick_file">או לבחור קובץ שמע</string>
+    <string name="reading">קורא את הקובץ…</string>
+    <string name="processing">מחליק את ההודעה…</string>
+    <string name="too_short">ההקלטה קצרה מדי.</string>
+    <string name="no_mic">צריך הרשאת מיקרופון כדי להקליט.</string>
+    <string name="read_failed">לא הצלחתי לקרוא את קובץ השמע.</string>
+    <string name="process_failed">העיבוד נכשל: %1$s</string>
+    <string name="nothing_found">לא נמצא מה להחליק, ההודעה נשארה כמו שהיא.</string>
+    <string name="summary">הוחלקו %1$s. %2$s שניות הפכו ל-%3$s.</string>
+    <string name="event_line">%1$s: מ-%2$s עד %3$s שנ׳</string>
+    <string name="k_repetition">חזרות</string>
+    <string name="k_prolongation">הארכות</string>
+    <string name="k_block">חסימות</string>
+    <string name="k_pause">הפסקות ארוכות</string>
+    <string name="play_after">▶ השמעה אחרי החלקה</string>
+    <string name="play_before">▶ השמעת המקור</string>
+    <string name="stop_playing">■ עצירה</string>
+    <string name="share_whatsapp">שליחה לוואטסאפ</string>
+    <string name="share_other">שיתוף לאפליקציה אחרת</string>
+    <string name="share_title">שליחת ההודעה</string>
+</resources>

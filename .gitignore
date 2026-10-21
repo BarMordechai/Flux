@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.apk
+.idea/

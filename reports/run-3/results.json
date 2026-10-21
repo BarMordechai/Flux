@@ -1,0 +1,2178 @@
+{
+ "episodes": [
+  "HeStutters/14",
+  "HVSA/3",
+  "MyStutteringLife/5",
+  "StutterTalk/37",
+  "WomenWhoStutter/42",
+  "HeStutters/0",
+  "HVSA/1",
+  "MyStutteringLife/38",
+  "StutterTalk/18",
+  "WomenWhoStutter/45",
+  "HeStutters/17",
+  "HVSA/2",
+  "MyStutteringLife/29",
+  "StutterTalk/16",
+  "WomenWhoStutter/106",
+  "HeStutters/7",
+  "HVSA/0",
+  "MyStutteringLife/11",
+  "StutterTalk/48",
+  "WomenWhoStutter/37",
+  "HeStutters/6",
+  "MyStutteringLife/4",
+  "StutterTalk/31",
+  "WomenWhoStutter/64",
+  "HeStutters/11",
+  "MyStutteringLife/17",
+  "StutterTalk/60",
+  "WomenWhoStutter/95",
+  "HeStutters/22",
+  "MyStutteringLife/37",
+  "StutterTalk/11",
+  "WomenWhoStutter/55",
+  "HeStutters/21",
+  "MyStutteringLife/1",
+  "StutterTalk/20",
+  "WomenWhoStutter/82",
+  "HeStutters/10",
+  "MyStutteringLife/18",
+  "StutterTalk/32",
+  "WomenWhoStutter/109"
+ ],
+ "clips": 2799,
+ "fluent_clips": 537,
+ "positives": {
+  "Prolongation": 254,
+  "Block": 297,
+  "SoundRep": 268,
+  "WordRep": 375,
+  "Interjection": 735
+ },
+ "modes": [
+  {
+   "mode": "gentle",
+   "false_positive_rate": 0.329608938547486,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.5757575757575758,
+   "recall_SoundRep": 0.033582089552238806,
+   "recall_WordRep": 0.008,
+   "recall_any_stutter": 0.4677268475210477
+  },
+  {
+   "mode": "full",
+   "false_positive_rate": 0.44320297951582865,
+   "recall_Prolongation": 0.0984251968503937,
+   "recall_Block": 0.6666666666666666,
+   "recall_SoundRep": 0.2574626865671642,
+   "recall_WordRep": 0.12266666666666666,
+   "recall_any_stutter": 0.6043030869971936
+  },
+  {
+   "mode": "strong",
+   "false_positive_rate": 0.5977653631284916,
+   "recall_Prolongation": 0.4094488188976378,
+   "recall_Block": 0.7710437710437711,
+   "recall_SoundRep": 0.4291044776119403,
+   "recall_WordRep": 0.31733333333333336,
+   "recall_any_stutter": 0.7876520112254444
+  }
+ ],
+ "results": [
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.18,
+    "steady_db": 1.6
+   },
+   "false_positive_rate": 0.00558659217877095,
+   "recall_Prolongation": 0.05511811023622047,
+   "recall_Block": 0.013468013468013467,
+   "recall_SoundRep": 0.014925373134328358,
+   "recall_WordRep": 0.016,
+   "recall_Interjection": 0.034013605442176874,
+   "recall": 0.05511811023622047
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.22,
+    "steady_db": 1.6
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.031496062992125984,
+   "recall_Block": 0.003367003367003367,
+   "recall_SoundRep": 0.0037313432835820895,
+   "recall_WordRep": 0.0026666666666666666,
+   "recall_Interjection": 0.0163265306122449,
+   "recall": 0.031496062992125984
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.3,
+    "steady_db": 1.6
+   },
+   "false_positive_rate": 0.0,
+   "recall_Prolongation": 0.015748031496062992,
+   "recall_Block": 0.0,
+   "recall_SoundRep": 0.0,
+   "recall_WordRep": 0.0,
+   "recall_Interjection": 0.005442176870748299,
+   "recall": 0.015748031496062992
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.45,
+    "steady_db": 1.6
+   },
+   "false_positive_rate": 0.0,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.0,
+   "recall_SoundRep": 0.0,
+   "recall_WordRep": 0.0,
+   "recall_Interjection": 0.0,
+   "recall": 0.0
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.18,
+    "steady_db": 2.2
+   },
+   "false_positive_rate": 0.04283054003724395,
+   "recall_Prolongation": 0.33858267716535434,
+   "recall_Block": 0.08417508417508418,
+   "recall_SoundRep": 0.06343283582089553,
+   "recall_WordRep": 0.10133333333333333,
+   "recall_Interjection": 0.19727891156462585,
+   "recall": 0.33858267716535434
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.22,
+    "steady_db": 2.2
+   },
+   "false_positive_rate": 0.0148975791433892,
+   "recall_Prolongation": 0.22440944881889763,
+   "recall_Block": 0.037037037037037035,
+   "recall_SoundRep": 0.03731343283582089,
+   "recall_WordRep": 0.06133333333333333,
+   "recall_Interjection": 0.11428571428571428,
+   "recall": 0.22440944881889763
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.3,
+    "steady_db": 2.2
+   },
+   "false_positive_rate": 0.0037243947858473,
+   "recall_Prolongation": 0.0984251968503937,
+   "recall_Block": 0.013468013468013467,
+   "recall_SoundRep": 0.011194029850746268,
+   "recall_WordRep": 0.013333333333333334,
+   "recall_Interjection": 0.02585034013605442,
+   "recall": 0.0984251968503937
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.45,
+    "steady_db": 2.2
+   },
+   "false_positive_rate": 0.0,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.003367003367003367,
+   "recall_SoundRep": 0.0037313432835820895,
+   "recall_WordRep": 0.005333333333333333,
+   "recall_Interjection": 0.004081632653061225,
+   "recall": 0.01968503937007874
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.18,
+    "steady_db": 2.8
+   },
+   "false_positive_rate": 0.10242085661080075,
+   "recall_Prolongation": 0.5433070866141733,
+   "recall_Block": 0.1750841750841751,
+   "recall_SoundRep": 0.19029850746268656,
+   "recall_WordRep": 0.18933333333333333,
+   "recall_Interjection": 0.36462585034013606,
+   "recall": 0.5433070866141733
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.22,
+    "steady_db": 2.8
+   },
+   "false_positive_rate": 0.04655493482309125,
+   "recall_Prolongation": 0.4094488188976378,
+   "recall_Block": 0.08417508417508418,
+   "recall_SoundRep": 0.08955223880597014,
+   "recall_WordRep": 0.10133333333333333,
+   "recall_Interjection": 0.2163265306122449,
+   "recall": 0.4094488188976378
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.3,
+    "steady_db": 2.8
+   },
+   "false_positive_rate": 0.0074487895716946,
+   "recall_Prolongation": 0.20866141732283464,
+   "recall_Block": 0.02356902356902357,
+   "recall_SoundRep": 0.029850746268656716,
+   "recall_WordRep": 0.032,
+   "recall_Interjection": 0.08707482993197278,
+   "recall": 0.20866141732283464
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.45,
+    "steady_db": 2.8
+   },
+   "false_positive_rate": 0.0037243947858473,
+   "recall_Prolongation": 0.05511811023622047,
+   "recall_Block": 0.006734006734006734,
+   "recall_SoundRep": 0.007462686567164179,
+   "recall_WordRep": 0.008,
+   "recall_Interjection": 0.013605442176870748,
+   "recall": 0.05511811023622047
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.18,
+    "steady_db": 3.4
+   },
+   "false_positive_rate": 0.20297951582867785,
+   "recall_Prolongation": 0.6732283464566929,
+   "recall_Block": 0.30303030303030304,
+   "recall_SoundRep": 0.27238805970149255,
+   "recall_WordRep": 0.30933333333333335,
+   "recall_Interjection": 0.5251700680272109,
+   "recall": 0.6732283464566929
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.22,
+    "steady_db": 3.4
+   },
+   "false_positive_rate": 0.1005586592178771,
+   "recall_Prolongation": 0.5078740157480315,
+   "recall_Block": 0.17845117845117844,
+   "recall_SoundRep": 0.16791044776119404,
+   "recall_WordRep": 0.19733333333333333,
+   "recall_Interjection": 0.3510204081632653,
+   "recall": 0.5078740157480315
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.3,
+    "steady_db": 3.4
+   },
+   "false_positive_rate": 0.020484171322160148,
+   "recall_Prolongation": 0.28346456692913385,
+   "recall_Block": 0.04377104377104377,
+   "recall_SoundRep": 0.055970149253731345,
+   "recall_WordRep": 0.056,
+   "recall_Interjection": 0.1346938775510204,
+   "recall": 0.28346456692913385
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.45,
+    "steady_db": 3.4
+   },
+   "false_positive_rate": 0.0037243947858473,
+   "recall_Prolongation": 0.08661417322834646,
+   "recall_Block": 0.006734006734006734,
+   "recall_SoundRep": 0.014925373134328358,
+   "recall_WordRep": 0.008,
+   "recall_Interjection": 0.02585034013605442,
+   "recall": 0.08661417322834646
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.18,
+    "steady_db": 4.0
+   },
+   "false_positive_rate": 0.33519553072625696,
+   "recall_Prolongation": 0.7874015748031497,
+   "recall_Block": 0.4107744107744108,
+   "recall_SoundRep": 0.40298507462686567,
+   "recall_WordRep": 0.43733333333333335,
+   "recall_Interjection": 0.6326530612244898,
+   "recall": 0.7874015748031497
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.22,
+    "steady_db": 4.0
+   },
+   "false_positive_rate": 0.15456238361266295,
+   "recall_Prolongation": 0.5748031496062992,
+   "recall_Block": 0.26262626262626265,
+   "recall_SoundRep": 0.22014925373134328,
+   "recall_WordRep": 0.2693333333333333,
+   "recall_Interjection": 0.46258503401360546,
+   "recall": 0.5748031496062992
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.3,
+    "steady_db": 4.0
+   },
+   "false_positive_rate": 0.035381750465549346,
+   "recall_Prolongation": 0.38188976377952755,
+   "recall_Block": 0.0707070707070707,
+   "recall_SoundRep": 0.09701492537313433,
+   "recall_WordRep": 0.104,
+   "recall_Interjection": 0.20816326530612245,
+   "recall": 0.38188976377952755
+  },
+  {
+   "detector": "prolongation",
+   "params": {
+    "prolong_min": 0.45,
+    "steady_db": 4.0
+   },
+   "false_positive_rate": 0.0074487895716946,
+   "recall_Prolongation": 0.12992125984251968,
+   "recall_Block": 0.003367003367003367,
+   "recall_SoundRep": 0.014925373134328358,
+   "recall_WordRep": 0.016,
+   "recall_Interjection": 0.03537414965986395,
+   "recall": 0.12992125984251968
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0037243947858473,
+   "recall_Prolongation": 0.015748031496062992,
+   "recall_Block": 0.030303030303030304,
+   "recall_SoundRep": 0.12686567164179105,
+   "recall_WordRep": 0.050666666666666665,
+   "recall_Interjection": 0.021768707482993196,
+   "recall": 0.08876616915422886
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.00558659217877095,
+   "recall_Prolongation": 0.015748031496062992,
+   "recall_Block": 0.030303030303030304,
+   "recall_SoundRep": 0.13059701492537312,
+   "recall_WordRep": 0.056,
+   "recall_Interjection": 0.024489795918367346,
+   "recall": 0.09329850746268656
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0074487895716946,
+   "recall_Prolongation": 0.015748031496062992,
+   "recall_Block": 0.030303030303030304,
+   "recall_SoundRep": 0.13432835820895522,
+   "recall_WordRep": 0.056,
+   "recall_Interjection": 0.024489795918367346,
+   "recall": 0.09516417910447761
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0074487895716946,
+   "recall_Prolongation": 0.015748031496062992,
+   "recall_Block": 0.030303030303030304,
+   "recall_SoundRep": 0.13432835820895522,
+   "recall_WordRep": 0.056,
+   "recall_Interjection": 0.024489795918367346,
+   "recall": 0.09516417910447761
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0111731843575419,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.04040404040404041,
+   "recall_SoundRep": 0.1455223880597015,
+   "recall_WordRep": 0.058666666666666666,
+   "recall_Interjection": 0.024489795918367346,
+   "recall": 0.10209452736318408
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.01303538175046555,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.04377104377104377,
+   "recall_SoundRep": 0.15298507462686567,
+   "recall_WordRep": 0.06666666666666667,
+   "recall_Interjection": 0.02857142857142857,
+   "recall": 0.10982587064676616
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0148975791433892,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.04377104377104377,
+   "recall_SoundRep": 0.15671641791044777,
+   "recall_WordRep": 0.06666666666666667,
+   "recall_Interjection": 0.02857142857142857,
+   "recall": 0.11169154228855721
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0148975791433892,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.04377104377104377,
+   "recall_SoundRep": 0.16044776119402984,
+   "recall_WordRep": 0.072,
+   "recall_Interjection": 0.02857142857142857,
+   "recall": 0.11622388059701491
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.01675977653631285,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.04713804713804714,
+   "recall_SoundRep": 0.15671641791044777,
+   "recall_WordRep": 0.07466666666666667,
+   "recall_Interjection": 0.02857142857142857,
+   "recall": 0.11569154228855721
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.020484171322160148,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.05387205387205387,
+   "recall_SoundRep": 0.16417910447761194,
+   "recall_WordRep": 0.08266666666666667,
+   "recall_Interjection": 0.0326530612244898,
+   "recall": 0.1234228855721393
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0223463687150838,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.05723905723905724,
+   "recall_SoundRep": 0.17164179104477612,
+   "recall_WordRep": 0.088,
+   "recall_Interjection": 0.0326530612244898,
+   "recall": 0.12982089552238807
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0223463687150838,
+   "recall_Prolongation": 0.01968503937007874,
+   "recall_Block": 0.05723905723905724,
+   "recall_SoundRep": 0.17537313432835822,
+   "recall_WordRep": 0.09866666666666667,
+   "recall_Interjection": 0.0326530612244898,
+   "recall": 0.13701990049751245
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.024208566108007448,
+   "recall_Prolongation": 0.023622047244094488,
+   "recall_Block": 0.04713804713804714,
+   "recall_SoundRep": 0.16417910447761194,
+   "recall_WordRep": 0.09066666666666667,
+   "recall_Interjection": 0.034013605442176874,
+   "recall": 0.12742288557213932
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.027932960893854747,
+   "recall_Prolongation": 0.023622047244094488,
+   "recall_Block": 0.05723905723905724,
+   "recall_SoundRep": 0.17164179104477612,
+   "recall_WordRep": 0.10133333333333333,
+   "recall_Interjection": 0.04217687074829932,
+   "recall": 0.13648756218905472
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0297951582867784,
+   "recall_Prolongation": 0.023622047244094488,
+   "recall_Block": 0.06060606060606061,
+   "recall_SoundRep": 0.1791044776119403,
+   "recall_WordRep": 0.10933333333333334,
+   "recall_Interjection": 0.04353741496598639,
+   "recall": 0.14421890547263683
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 3.0
+   },
+   "false_positive_rate": 0.0297951582867784,
+   "recall_Prolongation": 0.023622047244094488,
+   "recall_Block": 0.06060606060606061,
+   "recall_SoundRep": 0.1828358208955224,
+   "recall_WordRep": 0.12,
+   "recall_Interjection": 0.044897959183673466,
+   "recall": 0.1514179104477612
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0186219739292365,
+   "recall_Prolongation": 0.051181102362204724,
+   "recall_Block": 0.09090909090909091,
+   "recall_SoundRep": 0.22388059701492538,
+   "recall_WordRep": 0.09333333333333334,
+   "recall_Interjection": 0.055782312925170066,
+   "recall": 0.15860696517412937
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0223463687150838,
+   "recall_Prolongation": 0.051181102362204724,
+   "recall_Block": 0.10101010101010101,
+   "recall_SoundRep": 0.23134328358208955,
+   "recall_WordRep": 0.096,
+   "recall_Interjection": 0.05986394557823129,
+   "recall": 0.16367164179104476
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.024208566108007448,
+   "recall_Prolongation": 0.051181102362204724,
+   "recall_Block": 0.10101010101010101,
+   "recall_SoundRep": 0.23507462686567165,
+   "recall_WordRep": 0.09866666666666667,
+   "recall_Interjection": 0.061224489795918366,
+   "recall": 0.16687064676616917
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.024208566108007448,
+   "recall_Prolongation": 0.051181102362204724,
+   "recall_Block": 0.11447811447811448,
+   "recall_SoundRep": 0.24253731343283583,
+   "recall_WordRep": 0.10133333333333333,
+   "recall_Interjection": 0.06394557823129252,
+   "recall": 0.1719353233830846
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0335195530726257,
+   "recall_Prolongation": 0.05905511811023622,
+   "recall_Block": 0.10437710437710437,
+   "recall_SoundRep": 0.25,
+   "recall_WordRep": 0.11733333333333333,
+   "recall_Interjection": 0.06802721088435375,
+   "recall": 0.18366666666666667
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.037243947858473,
+   "recall_Prolongation": 0.05905511811023622,
+   "recall_Block": 0.12121212121212122,
+   "recall_SoundRep": 0.2574626865671642,
+   "recall_WordRep": 0.12266666666666666,
+   "recall_Interjection": 0.07210884353741497,
+   "recall": 0.19006467661691542
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.040968342644320296,
+   "recall_Prolongation": 0.06299212598425197,
+   "recall_Block": 0.12457912457912458,
+   "recall_SoundRep": 0.26119402985074625,
+   "recall_WordRep": 0.12533333333333332,
+   "recall_Interjection": 0.0761904761904762,
+   "recall": 0.19326368159203977
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0446927374301676,
+   "recall_Prolongation": 0.06299212598425197,
+   "recall_Block": 0.13804713804713806,
+   "recall_SoundRep": 0.27238805970149255,
+   "recall_WordRep": 0.136,
+   "recall_Interjection": 0.08027210884353742,
+   "recall": 0.20419402985074628
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.055865921787709494,
+   "recall_Prolongation": 0.07874015748031496,
+   "recall_Block": 0.12121212121212122,
+   "recall_SoundRep": 0.27238805970149255,
+   "recall_WordRep": 0.152,
+   "recall_Interjection": 0.09115646258503401,
+   "recall": 0.21219402985074626
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0633147113594041,
+   "recall_Prolongation": 0.07874015748031496,
+   "recall_Block": 0.1414141414141414,
+   "recall_SoundRep": 0.2798507462686567,
+   "recall_WordRep": 0.15733333333333333,
+   "recall_Interjection": 0.09523809523809523,
+   "recall": 0.218592039800995
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.06890130353817504,
+   "recall_Prolongation": 0.08267716535433071,
+   "recall_Block": 0.14814814814814814,
+   "recall_SoundRep": 0.2873134328358209,
+   "recall_WordRep": 0.16533333333333333,
+   "recall_Interjection": 0.09931972789115646,
+   "recall": 0.2263233830845771
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.07635009310986965,
+   "recall_Prolongation": 0.08661417322834646,
+   "recall_Block": 0.16161616161616163,
+   "recall_SoundRep": 0.29850746268656714,
+   "recall_WordRep": 0.17866666666666667,
+   "recall_Interjection": 0.10476190476190476,
+   "recall": 0.2385870646766169
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0782122905027933,
+   "recall_Prolongation": 0.09448818897637795,
+   "recall_Block": 0.1447811447811448,
+   "recall_SoundRep": 0.2947761194029851,
+   "recall_WordRep": 0.184,
+   "recall_Interjection": 0.11020408163265306,
+   "recall": 0.23938805970149254
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.0856610800744879,
+   "recall_Prolongation": 0.1062992125984252,
+   "recall_Block": 0.1717171717171717,
+   "recall_SoundRep": 0.30223880597014924,
+   "recall_WordRep": 0.19466666666666665,
+   "recall_Interjection": 0.12244897959183673,
+   "recall": 0.24845273631840795
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.09683426443202979,
+   "recall_Prolongation": 0.1141732283464567,
+   "recall_Block": 0.18181818181818182,
+   "recall_SoundRep": 0.30970149253731344,
+   "recall_WordRep": 0.20533333333333334,
+   "recall_Interjection": 0.13197278911564625,
+   "recall": 0.2575174129353234
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 4.0
+   },
+   "false_positive_rate": 0.10242085661080075,
+   "recall_Prolongation": 0.11811023622047244,
+   "recall_Block": 0.19528619528619529,
+   "recall_SoundRep": 0.3208955223880597,
+   "recall_WordRep": 0.21866666666666668,
+   "recall_Interjection": 0.13877551020408163,
+   "recall": 0.2697810945273632
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.074487895716946,
+   "recall_Prolongation": 0.1062992125984252,
+   "recall_Block": 0.21548821548821548,
+   "recall_SoundRep": 0.3358208955223881,
+   "recall_WordRep": 0.17866666666666667,
+   "recall_Interjection": 0.12108843537414966,
+   "recall": 0.2572437810945274
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.09124767225325885,
+   "recall_Prolongation": 0.1062992125984252,
+   "recall_Block": 0.24242424242424243,
+   "recall_SoundRep": 0.3582089552238806,
+   "recall_WordRep": 0.18933333333333333,
+   "recall_Interjection": 0.13197278911564625,
+   "recall": 0.27377114427860694
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.1005586592178771,
+   "recall_Prolongation": 0.1062992125984252,
+   "recall_Block": 0.24915824915824916,
+   "recall_SoundRep": 0.3694029850746269,
+   "recall_WordRep": 0.19466666666666665,
+   "recall_Interjection": 0.1401360544217687,
+   "recall": 0.28203482587064677
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.1042830540037244,
+   "recall_Prolongation": 0.11023622047244094,
+   "recall_Block": 0.26936026936026936,
+   "recall_SoundRep": 0.3843283582089552,
+   "recall_WordRep": 0.20266666666666666,
+   "recall_Interjection": 0.14421768707482993,
+   "recall": 0.29349751243781097
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.11731843575418995,
+   "recall_Prolongation": 0.12598425196850394,
+   "recall_Block": 0.25925925925925924,
+   "recall_SoundRep": 0.373134328358209,
+   "recall_WordRep": 0.23733333333333334,
+   "recall_Interjection": 0.17142857142857143,
+   "recall": 0.30523383084577116
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.13594040968342644,
+   "recall_Prolongation": 0.12598425196850394,
+   "recall_Block": 0.2962962962962963,
+   "recall_SoundRep": 0.3917910447761194,
+   "recall_WordRep": 0.25066666666666665,
+   "recall_Interjection": 0.18775510204081633,
+   "recall": 0.32122885572139304
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.14711359404096835,
+   "recall_Prolongation": 0.1377952755905512,
+   "recall_Block": 0.2996632996632997,
+   "recall_SoundRep": 0.40298507462686567,
+   "recall_WordRep": 0.25866666666666666,
+   "recall_Interjection": 0.20272108843537415,
+   "recall": 0.33082587064676616
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.15456238361266295,
+   "recall_Prolongation": 0.14566929133858267,
+   "recall_Block": 0.32323232323232326,
+   "recall_SoundRep": 0.4253731343283582,
+   "recall_WordRep": 0.2773333333333333,
+   "recall_Interjection": 0.21224489795918366,
+   "recall": 0.35135323383084577
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.16387337057728119,
+   "recall_Prolongation": 0.14960629921259844,
+   "recall_Block": 0.2962962962962963,
+   "recall_SoundRep": 0.39552238805970147,
+   "recall_WordRep": 0.2853333333333333,
+   "recall_Interjection": 0.20816326530612245,
+   "recall": 0.3404278606965174
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.1824953445065177,
+   "recall_Prolongation": 0.15354330708661418,
+   "recall_Block": 0.3367003367003367,
+   "recall_SoundRep": 0.4141791044776119,
+   "recall_WordRep": 0.30133333333333334,
+   "recall_Interjection": 0.22448979591836735,
+   "recall": 0.3577562189054726
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.19925512104283055,
+   "recall_Prolongation": 0.16929133858267717,
+   "recall_Block": 0.3501683501683502,
+   "recall_SoundRep": 0.4291044776119403,
+   "recall_WordRep": 0.31733333333333336,
+   "recall_Interjection": 0.24081632653061225,
+   "recall": 0.3732189054726368
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.2122905027932961,
+   "recall_Prolongation": 0.18110236220472442,
+   "recall_Block": 0.38047138047138046,
+   "recall_SoundRep": 0.4552238805970149,
+   "recall_WordRep": 0.3413333333333333,
+   "recall_Interjection": 0.25578231292517006,
+   "recall": 0.39827860696517414
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.20297951582867785,
+   "recall_Prolongation": 0.1889763779527559,
+   "recall_Block": 0.3333333333333333,
+   "recall_SoundRep": 0.4291044776119403,
+   "recall_WordRep": 0.34933333333333333,
+   "recall_Interjection": 0.25170068027210885,
+   "recall": 0.3892189054726368
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.21973929236499068,
+   "recall_Prolongation": 0.20078740157480315,
+   "recall_Block": 0.38047138047138046,
+   "recall_SoundRep": 0.4552238805970149,
+   "recall_WordRep": 0.37333333333333335,
+   "recall_Interjection": 0.27346938775510204,
+   "recall": 0.41427860696517416
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.2532588454376164,
+   "recall_Prolongation": 0.23228346456692914,
+   "recall_Block": 0.40404040404040403,
+   "recall_SoundRep": 0.4701492537313433,
+   "recall_WordRep": 0.392,
+   "recall_Interjection": 0.3047619047619048,
+   "recall": 0.43107462686567166
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 5.5
+   },
+   "false_positive_rate": 0.26629422718808193,
+   "recall_Prolongation": 0.25196850393700787,
+   "recall_Block": 0.43097643097643096,
+   "recall_SoundRep": 0.4925373134328358,
+   "recall_WordRep": 0.416,
+   "recall_Interjection": 0.3224489795918367,
+   "recall": 0.4542686567164179
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.14338919925512103,
+   "recall_Prolongation": 0.15748031496062992,
+   "recall_Block": 0.32996632996632996,
+   "recall_SoundRep": 0.39925373134328357,
+   "recall_WordRep": 0.24266666666666667,
+   "recall_Interjection": 0.1836734693877551,
+   "recall": 0.32096019900497513
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.16387337057728119,
+   "recall_Prolongation": 0.16141732283464566,
+   "recall_Block": 0.367003367003367,
+   "recall_SoundRep": 0.4291044776119403,
+   "recall_WordRep": 0.25866666666666666,
+   "recall_Interjection": 0.20136054421768707,
+   "recall": 0.3438855721393035
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.1750465549348231,
+   "recall_Prolongation": 0.16535433070866143,
+   "recall_Block": 0.39057239057239057,
+   "recall_SoundRep": 0.45149253731343286,
+   "recall_WordRep": 0.26666666666666666,
+   "recall_Interjection": 0.21360544217687075,
+   "recall": 0.35907960199004973
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.25,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.1824953445065177,
+   "recall_Prolongation": 0.1732283464566929,
+   "recall_Block": 0.4175084175084175,
+   "recall_SoundRep": 0.47388059701492535,
+   "recall_WordRep": 0.27466666666666667,
+   "recall_Interjection": 0.22448979591836735,
+   "recall": 0.374273631840796
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.2011173184357542,
+   "recall_Prolongation": 0.1889763779527559,
+   "recall_Block": 0.3771043771043771,
+   "recall_SoundRep": 0.44029850746268656,
+   "recall_WordRep": 0.31733333333333336,
+   "recall_Interjection": 0.24761904761904763,
+   "recall": 0.37881592039800993
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.22346368715083798,
+   "recall_Prolongation": 0.19291338582677164,
+   "recall_Block": 0.4208754208754209,
+   "recall_SoundRep": 0.4701492537313433,
+   "recall_WordRep": 0.336,
+   "recall_Interjection": 0.2680272108843537,
+   "recall": 0.40307462686567164
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.24022346368715083,
+   "recall_Prolongation": 0.20866141732283464,
+   "recall_Block": 0.4444444444444444,
+   "recall_SoundRep": 0.4925373134328358,
+   "recall_WordRep": 0.3466666666666667,
+   "recall_Interjection": 0.291156462585034,
+   "recall": 0.41960199004975124
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.35,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.2532588454376164,
+   "recall_Prolongation": 0.2125984251968504,
+   "recall_Block": 0.47474747474747475,
+   "recall_SoundRep": 0.5223880597014925,
+   "recall_WordRep": 0.368,
+   "recall_Interjection": 0.3129251700680272,
+   "recall": 0.44519402985074624
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.25884543761638734,
+   "recall_Prolongation": 0.23622047244094488,
+   "recall_Block": 0.4276094276094276,
+   "recall_SoundRep": 0.47388059701492535,
+   "recall_WordRep": 0.368,
+   "recall_Interjection": 0.2979591836734694,
+   "recall": 0.4209402985074627
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.2811918063314711,
+   "recall_Prolongation": 0.24015748031496062,
+   "recall_Block": 0.48148148148148145,
+   "recall_SoundRep": 0.5074626865671642,
+   "recall_WordRep": 0.392,
+   "recall_Interjection": 0.3224489795918367,
+   "recall": 0.4497313432835821
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.30353817504655495,
+   "recall_Prolongation": 0.25984251968503935,
+   "recall_Block": 0.5185185185185185,
+   "recall_SoundRep": 0.5335820895522388,
+   "recall_WordRep": 0.41333333333333333,
+   "recall_Interjection": 0.3469387755102041,
+   "recall": 0.4734577114427861
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.45,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.3202979515828678,
+   "recall_Prolongation": 0.27165354330708663,
+   "recall_Block": 0.5555555555555556,
+   "recall_SoundRep": 0.5671641791044776,
+   "recall_WordRep": 0.44,
+   "recall_Interjection": 0.3768707482993197,
+   "recall": 0.5035820895522388
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.4,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.3091247672253259,
+   "recall_Prolongation": 0.2992125984251969,
+   "recall_Block": 0.468013468013468,
+   "recall_SoundRep": 0.5186567164179104,
+   "recall_WordRep": 0.4533333333333333,
+   "recall_Interjection": 0.3659863945578231,
+   "recall": 0.48599502487562185
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.6,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.329608938547486,
+   "recall_Prolongation": 0.31496062992125984,
+   "recall_Block": 0.531986531986532,
+   "recall_SoundRep": 0.5634328358208955,
+   "recall_WordRep": 0.4826666666666667,
+   "recall_Interjection": 0.39591836734693875,
+   "recall": 0.5230497512437811
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 0.8,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.37057728119180633,
+   "recall_Prolongation": 0.35826771653543305,
+   "recall_Block": 0.5757575757575758,
+   "recall_SoundRep": 0.5895522388059702,
+   "recall_WordRep": 0.5066666666666667,
+   "recall_Interjection": 0.4326530612244898,
+   "recall": 0.5481094527363184
+  },
+  {
+   "detector": "repetition",
+   "params": {
+    "fragment_gap_max": 1.0,
+    "fragment_max": 0.6,
+    "fragment_sim_db": 7.0
+   },
+   "false_positive_rate": 0.3929236499068901,
+   "recall_Prolongation": 0.38976377952755903,
+   "recall_Block": 0.6195286195286195,
+   "recall_SoundRep": 0.6194029850746269,
+   "recall_WordRep": 0.5386666666666666,
+   "recall_Interjection": 0.46802721088435373,
+   "recall": 0.5790348258706468
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.003367003367003367,
+   "recall_SoundRep": 0.011194029850746268,
+   "recall_WordRep": 0.02666666666666667,
+   "recall_Interjection": 0.0027210884353741495,
+   "recall": 0.01893034825870647
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.006734006734006734,
+   "recall_SoundRep": 0.018656716417910446,
+   "recall_WordRep": 0.02666666666666667,
+   "recall_Interjection": 0.005442176870748299,
+   "recall": 0.02266169154228856
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.006734006734006734,
+   "recall_SoundRep": 0.022388059701492536,
+   "recall_WordRep": 0.029333333333333333,
+   "recall_Interjection": 0.005442176870748299,
+   "recall": 0.025860696517412934
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.003367003367003367,
+   "recall_SoundRep": 0.011194029850746268,
+   "recall_WordRep": 0.02666666666666667,
+   "recall_Interjection": 0.0027210884353741495,
+   "recall": 0.01893034825870647
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.006734006734006734,
+   "recall_SoundRep": 0.018656716417910446,
+   "recall_WordRep": 0.02666666666666667,
+   "recall_Interjection": 0.005442176870748299,
+   "recall": 0.02266169154228856
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.00186219739292365,
+   "recall_Prolongation": 0.0,
+   "recall_Block": 0.006734006734006734,
+   "recall_SoundRep": 0.022388059701492536,
+   "recall_WordRep": 0.029333333333333333,
+   "recall_Interjection": 0.005442176870748299,
+   "recall": 0.025860696517412934
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.5,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.0037243947858473,
+   "recall_Prolongation": 0.003937007874015748,
+   "recall_Block": 0.010101010101010102,
+   "recall_SoundRep": 0.07462686567164178,
+   "recall_WordRep": 0.05333333333333334,
+   "recall_Interjection": 0.014965986394557823,
+   "recall": 0.06398009950248756
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.5,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.00558659217877095,
+   "recall_Prolongation": 0.003937007874015748,
+   "recall_Block": 0.020202020202020204,
+   "recall_SoundRep": 0.09701492537313433,
+   "recall_WordRep": 0.064,
+   "recall_Interjection": 0.01904761904761905,
+   "recall": 0.08050746268656717
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.5,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.0074487895716946,
+   "recall_Prolongation": 0.003937007874015748,
+   "recall_Block": 0.020202020202020204,
+   "recall_SoundRep": 0.10820895522388059,
+   "recall_WordRep": 0.06666666666666667,
+   "recall_Interjection": 0.02040816326530612,
+   "recall": 0.08743781094527363
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.5,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.0037243947858473,
+   "recall_Prolongation": 0.007874015748031496,
+   "recall_Block": 0.010101010101010102,
+   "recall_SoundRep": 0.07462686567164178,
+   "recall_WordRep": 0.05333333333333334,
+   "recall_Interjection": 0.0163265306122449,
+   "recall": 0.06398009950248756
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.5,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.00558659217877095,
+   "recall_Prolongation": 0.007874015748031496,
+   "recall_Block": 0.020202020202020204,
+   "recall_SoundRep": 0.09701492537313433,
+   "recall_WordRep": 0.06933333333333333,
+   "recall_Interjection": 0.021768707482993196,
+   "recall": 0.08317412935323383
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 2.5,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.0074487895716946,
+   "recall_Prolongation": 0.007874015748031496,
+   "recall_Block": 0.020202020202020204,
+   "recall_SoundRep": 0.10820895522388059,
+   "recall_WordRep": 0.072,
+   "recall_Interjection": 0.02312925170068027,
+   "recall": 0.09010447761194029
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.0111731843575419,
+   "recall_Prolongation": 0.023622047244094488,
+   "recall_Block": 0.037037037037037035,
+   "recall_SoundRep": 0.15671641791044777,
+   "recall_WordRep": 0.10133333333333333,
+   "recall_Interjection": 0.029931972789115645,
+   "recall": 0.12902487562189055
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.01675977653631285,
+   "recall_Prolongation": 0.023622047244094488,
+   "recall_Block": 0.05387205387205387,
+   "recall_SoundRep": 0.1791044776119403,
+   "recall_WordRep": 0.12,
+   "recall_Interjection": 0.034013605442176874,
+   "recall": 0.14955223880597013
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.020484171322160148,
+   "recall_Prolongation": 0.027559055118110236,
+   "recall_Block": 0.06397306397306397,
+   "recall_SoundRep": 0.20149253731343283,
+   "recall_WordRep": 0.13866666666666666,
+   "recall_Interjection": 0.03537414965986395,
+   "recall": 0.17007960199004973
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.0111731843575419,
+   "recall_Prolongation": 0.027559055118110236,
+   "recall_Block": 0.037037037037037035,
+   "recall_SoundRep": 0.16044776119402984,
+   "recall_WordRep": 0.11466666666666667,
+   "recall_Interjection": 0.034013605442176874,
+   "recall": 0.13755721393034825
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.01675977653631285,
+   "recall_Prolongation": 0.031496062992125984,
+   "recall_Block": 0.05387205387205387,
+   "recall_SoundRep": 0.1828358208955224,
+   "recall_WordRep": 0.14133333333333334,
+   "recall_Interjection": 0.04081632653061224,
+   "recall": 0.16208457711442786
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.020484171322160148,
+   "recall_Prolongation": 0.03543307086614173,
+   "recall_Block": 0.06397306397306397,
+   "recall_SoundRep": 0.20522388059701493,
+   "recall_WordRep": 0.16,
+   "recall_Interjection": 0.04217687074829932,
+   "recall": 0.18261194029850747
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.5,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.027932960893854747,
+   "recall_Prolongation": 0.04330708661417323,
+   "recall_Block": 0.08080808080808081,
+   "recall_SoundRep": 0.1828358208955224,
+   "recall_WordRep": 0.152,
+   "recall_Interjection": 0.06394557823129252,
+   "recall": 0.1674179104477612
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.5,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.037243947858473,
+   "recall_Prolongation": 0.04330708661417323,
+   "recall_Block": 0.10437710437710437,
+   "recall_SoundRep": 0.20149253731343283,
+   "recall_WordRep": 0.18133333333333335,
+   "recall_Interjection": 0.0707482993197279,
+   "recall": 0.1914129353233831
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.5,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.0446927374301676,
+   "recall_Prolongation": 0.047244094488188976,
+   "recall_Block": 0.11447811447811448,
+   "recall_SoundRep": 0.22388059701492538,
+   "recall_WordRep": 0.20266666666666666,
+   "recall_Interjection": 0.07755102040816327,
+   "recall": 0.213273631840796
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.5,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.0335195530726257,
+   "recall_Prolongation": 0.05905511811023622,
+   "recall_Block": 0.08080808080808081,
+   "recall_SoundRep": 0.19029850746268656,
+   "recall_WordRep": 0.18666666666666668,
+   "recall_Interjection": 0.07482993197278912,
+   "recall": 0.18848258706467663
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.5,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.04283054003724395,
+   "recall_Prolongation": 0.06692913385826772,
+   "recall_Block": 0.10437710437710437,
+   "recall_SoundRep": 0.208955223880597,
+   "recall_WordRep": 0.22133333333333333,
+   "recall_Interjection": 0.08571428571428572,
+   "recall": 0.21514427860696517
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 3.5,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.0521415270018622,
+   "recall_Prolongation": 0.07480314960629922,
+   "recall_Block": 0.11447811447811448,
+   "recall_SoundRep": 0.23134328358208955,
+   "recall_WordRep": 0.24533333333333332,
+   "recall_Interjection": 0.09659863945578231,
+   "recall": 0.23833830845771142
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.08007448789571694,
+   "recall_Prolongation": 0.08661417322834646,
+   "recall_Block": 0.15824915824915825,
+   "recall_SoundRep": 0.23880597014925373,
+   "recall_WordRep": 0.21866666666666668,
+   "recall_Interjection": 0.12380952380952381,
+   "recall": 0.22873631840796022
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.09497206703910614,
+   "recall_Prolongation": 0.09448818897637795,
+   "recall_Block": 0.19865319865319866,
+   "recall_SoundRep": 0.26119402985074625,
+   "recall_WordRep": 0.248,
+   "recall_Interjection": 0.13333333333333333,
+   "recall": 0.2545970149253731
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.10800744878957169,
+   "recall_Prolongation": 0.1062992125984252,
+   "recall_Block": 0.21885521885521886,
+   "recall_SoundRep": 0.2798507462686567,
+   "recall_WordRep": 0.2773333333333333,
+   "recall_Interjection": 0.1510204081632653,
+   "recall": 0.278592039800995
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.09497206703910614,
+   "recall_Prolongation": 0.11811023622047244,
+   "recall_Block": 0.16835016835016836,
+   "recall_SoundRep": 0.2537313432835821,
+   "recall_WordRep": 0.2613333333333333,
+   "recall_Interjection": 0.14829931972789115,
+   "recall": 0.2575323383084577
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.10986964618249534,
+   "recall_Prolongation": 0.1377952755905512,
+   "recall_Block": 0.20875420875420875,
+   "recall_SoundRep": 0.27611940298507465,
+   "recall_WordRep": 0.296,
+   "recall_Interjection": 0.16598639455782313,
+   "recall": 0.28605970149253734
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.12849162011173185,
+   "recall_Prolongation": 0.16929133858267717,
+   "recall_Block": 0.24242424242424243,
+   "recall_SoundRep": 0.29850746268656714,
+   "recall_WordRep": 0.33066666666666666,
+   "recall_Interjection": 0.1945578231292517,
+   "recall": 0.3145870646766169
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.5,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.14711359404096835,
+   "recall_Prolongation": 0.12598425196850394,
+   "recall_Block": 0.23905723905723905,
+   "recall_SoundRep": 0.2873134328358209,
+   "recall_WordRep": 0.2853333333333333,
+   "recall_Interjection": 0.17959183673469387,
+   "recall": 0.2863233830845771
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.5,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.16573556797020483,
+   "recall_Prolongation": 0.1377952755905512,
+   "recall_Block": 0.28619528619528617,
+   "recall_SoundRep": 0.3208955223880597,
+   "recall_WordRep": 0.32266666666666666,
+   "recall_Interjection": 0.19863945578231293,
+   "recall": 0.32178109452736314
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.5,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.19366852886405958,
+   "recall_Prolongation": 0.16141732283464566,
+   "recall_Block": 0.3164983164983165,
+   "recall_SoundRep": 0.35074626865671643,
+   "recall_WordRep": 0.35733333333333334,
+   "recall_Interjection": 0.2272108843537415,
+   "recall": 0.35403980099502486
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.5,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.18994413407821228,
+   "recall_Prolongation": 0.1968503937007874,
+   "recall_Block": 0.27946127946127947,
+   "recall_SoundRep": 0.3283582089552239,
+   "recall_WordRep": 0.3466666666666667,
+   "recall_Interjection": 0.23129251700680273,
+   "recall": 0.3375124378109453
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.5,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.21042830540037244,
+   "recall_Prolongation": 0.23622047244094488,
+   "recall_Block": 0.32996632996632996,
+   "recall_SoundRep": 0.3619402985074627,
+   "recall_WordRep": 0.3973333333333333,
+   "recall_Interjection": 0.2639455782312925,
+   "recall": 0.379636815920398
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 4.5,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.24767225325884543,
+   "recall_Prolongation": 0.2755905511811024,
+   "recall_Block": 0.3771043771043771,
+   "recall_SoundRep": 0.39552238805970147,
+   "recall_WordRep": 0.44,
+   "recall_Interjection": 0.30612244897959184,
+   "recall": 0.41776119402985074
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 5.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.22532588454376165,
+   "recall_Prolongation": 0.1732283464566929,
+   "recall_Block": 0.30303030303030304,
+   "recall_SoundRep": 0.3619402985074627,
+   "recall_WordRep": 0.328,
+   "recall_Interjection": 0.254421768707483,
+   "recall": 0.3449701492537314
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 5.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.24581005586592178,
+   "recall_Prolongation": 0.18503937007874016,
+   "recall_Block": 0.35353535353535354,
+   "recall_SoundRep": 0.40671641791044777,
+   "recall_WordRep": 0.36533333333333334,
+   "recall_Interjection": 0.2816326530612245,
+   "recall": 0.3860248756218906
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 5.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.5
+   },
+   "false_positive_rate": 0.28677839851024206,
+   "recall_Prolongation": 0.23228346456692914,
+   "recall_Block": 0.3939393939393939,
+   "recall_SoundRep": 0.44402985074626866,
+   "recall_WordRep": 0.408,
+   "recall_Interjection": 0.3197278911564626,
+   "recall": 0.42601492537313435
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 5.0,
+    "word_gap_max": 0.3,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.28677839851024206,
+   "recall_Prolongation": 0.2637795275590551,
+   "recall_Block": 0.37037037037037035,
+   "recall_SoundRep": 0.417910447761194,
+   "recall_WordRep": 0.41333333333333333,
+   "recall_Interjection": 0.3251700680272109,
+   "recall": 0.4156218905472637
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 5.0,
+    "word_gap_max": 0.5,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.31098696461824954,
+   "recall_Prolongation": 0.3031496062992126,
+   "recall_Block": 0.43434343434343436,
+   "recall_SoundRep": 0.4664179104477612,
+   "recall_WordRep": 0.464,
+   "recall_Interjection": 0.37142857142857144,
+   "recall": 0.4652089552238806
+  },
+  {
+   "detector": "word_repetition",
+   "params": {
+    "word_dtw_db": 5.0,
+    "word_gap_max": 0.8,
+    "word_max": 0.8
+   },
+   "false_positive_rate": 0.3687150837988827,
+   "recall_Prolongation": 0.37401574803149606,
+   "recall_Block": 0.494949494949495,
+   "recall_SoundRep": 0.5111940298507462,
+   "recall_WordRep": 0.5173333333333333,
+   "recall_Interjection": 0.42993197278911566,
+   "recall": 0.5142636815920398
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.12,
+    "strain_margin_db": 3.0
+   },
+   "false_positive_rate": 0.6703910614525139,
+   "recall_Prolongation": 0.7637795275590551,
+   "recall_Block": 0.8754208754208754,
+   "recall_SoundRep": 0.8470149253731343,
+   "recall_WordRep": 0.736,
+   "recall_Interjection": 0.780952380952381,
+   "recall": 0.8754208754208754
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.12,
+    "strain_margin_db": 4.5
+   },
+   "false_positive_rate": 0.5940409683426443,
+   "recall_Prolongation": 0.7204724409448819,
+   "recall_Block": 0.8316498316498316,
+   "recall_SoundRep": 0.8059701492537313,
+   "recall_WordRep": 0.688,
+   "recall_Interjection": 0.7278911564625851,
+   "recall": 0.8316498316498316
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.12,
+    "strain_margin_db": 6.0
+   },
+   "false_positive_rate": 0.5456238361266295,
+   "recall_Prolongation": 0.6496062992125984,
+   "recall_Block": 0.8013468013468014,
+   "recall_SoundRep": 0.7723880597014925,
+   "recall_WordRep": 0.6186666666666667,
+   "recall_Interjection": 0.6707482993197279,
+   "recall": 0.8013468013468014
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.12,
+    "strain_margin_db": 8.0
+   },
+   "false_positive_rate": 0.4972067039106145,
+   "recall_Prolongation": 0.5551181102362205,
+   "recall_Block": 0.7272727272727273,
+   "recall_SoundRep": 0.7350746268656716,
+   "recall_WordRep": 0.5626666666666666,
+   "recall_Interjection": 0.6,
+   "recall": 0.7272727272727273
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.18,
+    "strain_margin_db": 3.0
+   },
+   "false_positive_rate": 0.5884543761638734,
+   "recall_Prolongation": 0.7125984251968503,
+   "recall_Block": 0.8013468013468014,
+   "recall_SoundRep": 0.7873134328358209,
+   "recall_WordRep": 0.64,
+   "recall_Interjection": 0.6993197278911565,
+   "recall": 0.8013468013468014
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.18,
+    "strain_margin_db": 4.5
+   },
+   "false_positive_rate": 0.5027932960893855,
+   "recall_Prolongation": 0.6614173228346457,
+   "recall_Block": 0.7609427609427609,
+   "recall_SoundRep": 0.7388059701492538,
+   "recall_WordRep": 0.576,
+   "recall_Interjection": 0.6353741496598639,
+   "recall": 0.7609427609427609
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.18,
+    "strain_margin_db": 6.0
+   },
+   "false_positive_rate": 0.4655493482309125,
+   "recall_Prolongation": 0.5826771653543307,
+   "recall_Block": 0.7239057239057239,
+   "recall_SoundRep": 0.6977611940298507,
+   "recall_WordRep": 0.48533333333333334,
+   "recall_Interjection": 0.5659863945578232,
+   "recall": 0.7239057239057239
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.18,
+    "strain_margin_db": 8.0
+   },
+   "false_positive_rate": 0.41154562383612664,
+   "recall_Prolongation": 0.4881889763779528,
+   "recall_Block": 0.6498316498316499,
+   "recall_SoundRep": 0.6529850746268657,
+   "recall_WordRep": 0.44,
+   "recall_Interjection": 0.4925170068027211,
+   "recall": 0.6498316498316499
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.25,
+    "strain_margin_db": 3.0
+   },
+   "false_positive_rate": 0.5512104283054003,
+   "recall_Prolongation": 0.6417322834645669,
+   "recall_Block": 0.7508417508417509,
+   "recall_SoundRep": 0.7350746268656716,
+   "recall_WordRep": 0.5973333333333334,
+   "recall_Interjection": 0.654421768707483,
+   "recall": 0.7508417508417509
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.25,
+    "strain_margin_db": 4.5
+   },
+   "false_positive_rate": 0.4655493482309125,
+   "recall_Prolongation": 0.594488188976378,
+   "recall_Block": 0.7037037037037037,
+   "recall_SoundRep": 0.6753731343283582,
+   "recall_WordRep": 0.5146666666666667,
+   "recall_Interjection": 0.5782312925170068,
+   "recall": 0.7037037037037037
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.25,
+    "strain_margin_db": 6.0
+   },
+   "false_positive_rate": 0.43202979515828677,
+   "recall_Prolongation": 0.5196850393700787,
+   "recall_Block": 0.6666666666666666,
+   "recall_SoundRep": 0.6343283582089553,
+   "recall_WordRep": 0.424,
+   "recall_Interjection": 0.5129251700680272,
+   "recall": 0.6666666666666666
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.25,
+    "strain_margin_db": 8.0
+   },
+   "false_positive_rate": 0.3743016759776536,
+   "recall_Prolongation": 0.4409448818897638,
+   "recall_Block": 0.6060606060606061,
+   "recall_SoundRep": 0.5895522388059702,
+   "recall_WordRep": 0.37866666666666665,
+   "recall_Interjection": 0.4489795918367347,
+   "recall": 0.6060606060606061
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.35,
+    "strain_margin_db": 3.0
+   },
+   "false_positive_rate": 0.47113594040968343,
+   "recall_Prolongation": 0.5984251968503937,
+   "recall_Block": 0.6531986531986532,
+   "recall_SoundRep": 0.6529850746268657,
+   "recall_WordRep": 0.5306666666666666,
+   "recall_Interjection": 0.5918367346938775,
+   "recall": 0.6531986531986532
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.35,
+    "strain_margin_db": 4.5
+   },
+   "false_positive_rate": 0.3780260707635009,
+   "recall_Prolongation": 0.5393700787401575,
+   "recall_Block": 0.6161616161616161,
+   "recall_SoundRep": 0.585820895522388,
+   "recall_WordRep": 0.44533333333333336,
+   "recall_Interjection": 0.5142857142857142,
+   "recall": 0.6161616161616161
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.35,
+    "strain_margin_db": 6.0
+   },
+   "false_positive_rate": 0.3426443202979516,
+   "recall_Prolongation": 0.484251968503937,
+   "recall_Block": 0.5892255892255892,
+   "recall_SoundRep": 0.5522388059701493,
+   "recall_WordRep": 0.368,
+   "recall_Interjection": 0.4530612244897959,
+   "recall": 0.5892255892255892
+  },
+  {
+   "detector": "block",
+   "params": {
+    "block_min": 0.35,
+    "strain_margin_db": 8.0
+   },
+   "false_positive_rate": 0.297951582867784,
+   "recall_Prolongation": 0.40551181102362205,
+   "recall_Block": 0.5353535353535354,
+   "recall_SoundRep": 0.5074626865671642,
+   "recall_WordRep": 0.328,
+   "recall_Interjection": 0.39319727891156464,
+   "recall": 0.5353535353535354
+  }
+ ]
+}

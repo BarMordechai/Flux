@@ -7,6 +7,9 @@ on:
         description: "How many podcast episodes to download and score"
         default: "40"
 
+permissions:
+  contents: write
+
 jobs:
   calibrate:
     runs-on: ubuntu-latest
@@ -25,3 +28,18 @@ jobs:
         with:
           name: calibration-report
           path: report/
+      - name: Save report to the calibration-reports branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898900+github-actions[bot]@users.noreply.github.com"
+          dir="reports/run-${{ github.run_number }}"
+          mkdir -p "/tmp/$dir" && cp report/* "/tmp/$dir/"
+          git fetch origin calibration-reports || true
+          if git rev-parse --verify origin/calibration-reports >/dev/null 2>&1; then
+            git checkout -B calibration-reports origin/calibration-reports
+          else
+            git checkout --orphan calibration-reports && git rm -rfq .
+          fi
+          mkdir -p "$dir" && cp "/tmp/$dir"/* "$dir/"
+          git add reports && git commit -qm "Calibration report, run ${{ github.run_number }}"
+          git push origin calibration-reports

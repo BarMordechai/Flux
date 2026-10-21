@@ -1,0 +1,27 @@
+name: Calibrate on SEP-28k
+
+on:
+  workflow_dispatch:
+    inputs:
+      episodes:
+        description: "How many podcast episodes to download and score"
+        default: "40"
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update -q && sudo apt-get install -yq ffmpeg
+      - run: pip install numpy
+      - name: Calibrate
+        run: python tools/calibrate_sep28k.py --episodes "${{ inputs.episodes }}" --out report
+      - run: cat report/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calibration-report
+          path: report/

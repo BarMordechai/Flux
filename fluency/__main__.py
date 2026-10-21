@@ -14,7 +14,7 @@ def main(argv=None):
     p = argparse.ArgumentParser(prog="fluency", description="Smooth stuttering in a recorded voice message.")
     p.add_argument("input", help="any audio file: .opus/.ogg (WhatsApp), .m4a, .wav, .mp3 ...")
     p.add_argument("output", help="output file; .ogg gives a WhatsApp-style Opus voice note")
-    p.add_argument("--mode", choices=["gentle", "full"], default="gentle")
+    p.add_argument("--mode", choices=["gentle", "full", "strong"], default="gentle")
     p.add_argument("--language", default="he")
     p.add_argument("--whisper", default="none", help="faster-whisper model, e.g. small, large-v3, or an ivrit.ai ct2 model")
     p.add_argument("--vad", choices=["auto", "silero", "energy"], default="auto")

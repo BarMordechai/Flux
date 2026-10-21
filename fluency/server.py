@@ -40,7 +40,7 @@ async def process_audio(
     language: str = Form("he"),
     fmt: str = Form("ogg"),
 ):
-    if mode not in ("gentle", "full") or fmt not in ("ogg", "wav", "mp3"):
+    if mode not in ("gentle", "full", "strong") or fmt not in ("ogg", "wav", "mp3"):
         raise HTTPException(400, "bad mode or format")
     data = await file.read(MAX_BYTES + 1)
     if len(data) > MAX_BYTES:

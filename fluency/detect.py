@@ -4,6 +4,7 @@ Every detector returns Events that carry the interval to remove (`cut`). Detecti
 conservative: cutting fluent speech is far worse for the user than leaving a stutter in.
 """
 
+import bisect
 import re
 from dataclasses import dataclass, field
 
@@ -23,11 +24,17 @@ class ModeSettings:
     pause_max: float  # natural pauses longer than this are shortened (s)
     pause_keep: float  # ...down to this (s)
     keep_one_repetition: bool  # leave a single repetition in, so the result still sounds human
+    fragment_max: float = 0.35  # a burst shorter than this can be a part-word repetition (s)
+    fragment_gap_max: float = 0.6  # longest gap between a fragment and its repeat (s)
+    fragment_sim_db: float = 4.0  # spectral distance below which a fragment matches the next onset
+    steady_db: float = 2.2  # spectral change below which a frame counts as a steady sound (calibrate on real data)
 
 
 MODES = {
     "gentle": ModeSettings(0.45, 0.20, 0.35, 0.25, 1.6, 0.9, True),
     "full": ModeSettings(0.30, 0.12, 0.25, 0.12, 1.0, 0.55, False),
+    # Strong: looser detectors and harder compression, for users who prefer fewer misses over naturalness.
+    "strong": ModeSettings(0.22, 0.08, 0.18, 0.08, 0.7, 0.4, False, 0.45, 0.8, 5.5, 2.8),
 }
 
 
@@ -35,18 +42,16 @@ MODES = {
 class DetectConfig:
     mode: str = "gentle"
     edge_keep: float = 0.25  # silence kept at the start/end of the message (s)
-    fragment_max: float = 0.35  # a burst shorter than this can be a part-word repetition (s)
-    fragment_gap_max: float = 0.6  # longest gap between a fragment and its repeat (s)
-    fragment_sim_db: float = 4.0  # spectral distance below which a fragment matches the next onset
-    steady_db: float = 2.2  # spectral change below which a frame counts as a steady sound (calibrate on real data)
     strain_margin_db: float = 6.0  # level above the noise floor that marks breath/strain noise
     allowed_doubles: set = field(
         default_factory=lambda: {"לאט", "מאוד", "כן", "לא", "עוד", "יותר", "very", "no", "yes", "bye", "ביי"}
     )
 
+    custom: ModeSettings | None = None  # overrides the named mode (used by calibration)
+
     @property
     def m(self) -> ModeSettings:
-        return MODES[self.mode]
+        return self.custom or MODES[self.mode]
 
 
 @dataclass
@@ -110,13 +115,13 @@ def acoustic_repetitions(f: feat.Features, regions, cfg: DetectConfig) -> list[E
         if i + 1 >= len(regions):
             return False
         (s, e), (ns, ne) = regions[i], regions[i + 1]
-        if sec(e - s) > cfg.fragment_max or sec(ns - e) > cfg.fragment_gap_max:
+        if sec(e - s) > cfg.m.fragment_max or sec(ns - e) > cfg.m.fragment_gap_max:
             return False
         n = e - s
         if ne - ns < n:  # the repeat target must be at least as long as the fragment
             return False
         dist = np.mean(np.abs(_profile(f, s, e) - _profile(f, ns, ns + n)))
-        return dist < cfg.fragment_sim_db
+        return dist < cfg.m.fragment_sim_db
 
     events = []
     for chain in _chains(regions, is_fragment):
@@ -135,12 +140,14 @@ def acoustic_repetitions(f: feat.Features, regions, cfg: DetectConfig) -> list[E
 def prolongations(f: feat.Features, mask: np.ndarray, regions, cfg: DetectConfig) -> list[Event]:
     half = 5
     change = feat.spectral_change(f, half)
-    steady = (change < cfg.steady_db) & mask
+    steady = (change < cfg.m.steady_db) & mask
     events = []
+    starts = [rs for rs, _ in regions]
     for s, e in runs(steady):
         s, e = max(0, s - half), min(f.n, e + half)  # the change window hides `half` frames each side
         dur = f.t(e - s)
-        region_end = next((re_ for rs, re_ in regions if rs <= s < re_), e)
+        ri = bisect.bisect_right(starts, s) - 1
+        region_end = regions[ri][1] if ri >= 0 and s < regions[ri][1] else e
         phrase_final = f.t(region_end - e) < 0.12
         need = cfg.m.prolong_min * (2.0 if phrase_final else 1.0)  # final lengthening is natural speech
         if dur < need:
@@ -207,7 +214,11 @@ def gaps(f: feat.Features, mask, regions, events, words, cfg: DetectConfig) -> l
             a = f.t(regions[-1][1])
             out.append(Event("edge", a, total, (a + cfg.edge_keep, total), "acoustic", "trailing silence"))
 
-    event_edges = [x.end for x in events] + [x.start for x in events]
+    event_edges = sorted([x.end for x in events] + [x.start for x in events])
+
+    def near_event(t: float) -> bool:
+        i = bisect.bisect_left(event_edges, t - 0.1)
+        return i < len(event_edges) and event_edges[i] < t + 0.1
     for (ps, pe), (ns, ne) in zip(regions, regions[1:]):
         a, b = f.t(pe), f.t(ns)
         dur = b - a
@@ -219,7 +230,7 @@ def gaps(f: feat.Features, mask, regions, events, words, cfg: DetectConfig) -> l
             reasons.append("breath/strain noise")
         if f.t(pe - ps) < 0.15:
             reasons.append("cut-off sound before the gap")
-        if any(abs(t - a) < 0.1 or abs(t - b) < 0.1 for t in event_edges):
+        if near_event(a) or near_event(b):
             reasons.append("next to another stutter event")
         for wd in words or []:
             if wd.start < a - 0.05 and wd.end > b + 0.05:

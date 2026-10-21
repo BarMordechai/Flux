@@ -61,8 +61,18 @@ class MainActivity : Activity() {
         playBefore = findViewById(R.id.playBefore)
 
         findViewById<RadioGroup>(R.id.modeGroup).setOnCheckedChangeListener { _, id ->
-            mode = if (id == R.id.modeFull) Mode.FULL else Mode.GENTLE
-            modeHint.setText(if (mode == Mode.FULL) R.string.mode_full_hint else R.string.mode_gentle_hint)
+            mode = when (id) {
+                R.id.modeFull -> Mode.FULL
+                R.id.modeStrong -> Mode.STRONG
+                else -> Mode.GENTLE
+            }
+            modeHint.setText(
+                when (mode) {
+                    Mode.FULL -> R.string.mode_full_hint
+                    Mode.STRONG -> R.string.mode_strong_hint
+                    else -> R.string.mode_gentle_hint
+                },
+            )
             input?.let { smooth(it) } // re-smooth the same message with the new setting
         }
         recBtn.setOnClickListener { toggleRecording() }
@@ -74,6 +84,7 @@ class MainActivity : Activity() {
         playBefore.setOnClickListener { togglePlay(playBefore, originalFile) }
         findViewById<Button>(R.id.shareWhatsApp).setOnClickListener { share(whatsApp = true) }
         findViewById<Button>(R.id.shareOther).setOnClickListener { share(whatsApp = false) }
+        findViewById<Button>(R.id.shareOriginal).setOnClickListener { share(whatsApp = false, original = true) }
         handleIntent(intent)
     }
 
@@ -234,12 +245,12 @@ class MainActivity : Activity() {
         playing = null
     }
 
-    private fun share(whatsApp: Boolean) {
-        val file = outputFile ?: return
+    private fun share(whatsApp: Boolean, original: Boolean = false) {
+        val file = (if (original) originalFile else outputFile) ?: return
         stopPlayback()
         val uri = FileProvider.getUriForFile(this, "$packageName.files", file)
         val send = Intent(Intent.ACTION_SEND).apply {
-            type = "audio/mp4"
+            type = if (original) "audio/wav" else "audio/mp4"
             putExtra(Intent.EXTRA_STREAM, uri)
             clipData = ClipData.newRawUri("", uri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

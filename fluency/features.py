@@ -73,8 +73,9 @@ def spectral_change(f: Features, half: int = 5) -> np.ndarray:
     """
     c = np.cumsum(np.vstack([np.zeros((1, f.logmel.shape[1])), f.logmel]), axis=0)
     out = np.full(f.n, np.inf)
-    for t in range(half, f.n - half):
+    t = np.arange(half, f.n - half)
+    if len(t):
         before = (c[t] - c[t - half]) / half
         after = (c[t + half] - c[t]) / half
-        out[t] = np.mean(np.abs(after - before))
+        out[t] = np.mean(np.abs(after - before), axis=1)
     return out

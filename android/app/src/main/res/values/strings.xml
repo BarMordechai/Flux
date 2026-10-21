@@ -2,8 +2,11 @@
 <resources>
     <string name="app_name">שטף</string>
     <string name="tagline">מקליטים הודעה, האפליקציה מחליקה חזרות, הארכות וחסימות בקול שלך, ושולחים לוואטסאפ. הכל קורה על הטלפון, בלי אינטרנט.</string>
-    <string name="mode_gentle">החלקה עדינה</string>
-    <string name="mode_full">החלקה מלאה</string>
+    <string name="mode_gentle">עדינה</string>
+    <string name="mode_full">מלאה</string>
+    <string name="mode_strong">חזקה</string>
+    <string name="mode_strong_hint">תופסת יותר, ומקצרת עוד יותר את השקטים. עלולה להישמע פחות טבעית.</string>
+    <string name="share_original">שיתוף ההקלטה המקורית (לכיול)</string>
     <string name="mode_gentle_hint">משאירה מעט חוסר שטף טבעי, כדי שההודעה תישמע כמוך.</string>
     <string name="mode_full_hint">מסירה כמה שיותר חזרות, הארכות וחסימות.</string>
     <string name="record">הקלטה</string>

@@ -44,7 +44,7 @@ def main():
         with wave.open(str(OUT / f"{name}.wav"), "wb") as w:
             w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
         x = pcm.astype(np.float32) / 32768.0
-        for mode in ("gentle", "full"):
+        for mode in ("gentle", "full", "strong"):
             res = process(x, SR, Settings(mode=mode, vad="energy"))
             kinds = ",".join(e.kind for e in res.events) or "-"
             lines.append(f"{name} {mode} {len(res.audio)} {kinds}")

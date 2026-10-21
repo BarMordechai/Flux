@@ -19,7 +19,7 @@ def fluent():
     return join(silence(0.2), W1(), silence(GAP), W2(), silence(GAP), W3(), silence(0.2))
 
 
-@pytest.mark.parametrize("mode", ["gentle", "full"])
+@pytest.mark.parametrize("mode", ["gentle", "full", "strong"])
 def test_fluent_speech_is_left_alone(mode):
     x = fluent()
     res = process(x, SR, Settings(mode=mode, vad="energy"))

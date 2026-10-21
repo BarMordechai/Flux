@@ -11,9 +11,15 @@ enum class Mode(
     val pauseMax: Double,
     val pauseKeep: Double,
     val keepOneRepetition: Boolean,
+    val fragmentMax: Double = 0.35,
+    val fragmentGapMax: Double = 0.6,
+    val fragmentSimDb: Double = 4.0,
+    val steadyDb: Double = 2.2,
 ) {
     GENTLE(0.45, 0.20, 0.35, 0.25, 1.6, 0.9, true),
     FULL(0.30, 0.12, 0.25, 0.12, 1.0, 0.55, false),
+    // Looser detectors and harder compression: fewer misses, less natural.
+    STRONG(0.22, 0.08, 0.18, 0.08, 0.7, 0.4, false, 0.45, 0.8, 5.5, 2.8),
 }
 
 enum class Kind { REPETITION, PROLONGATION, BLOCK, PAUSE, EDGE }
@@ -23,10 +29,6 @@ data class Event(val kind: Kind, val start: Double, val end: Double, val cutStar
 data class DetectConfig(
     val mode: Mode = Mode.GENTLE,
     val edgeKeep: Double = 0.25,
-    val fragmentMax: Double = 0.35,
-    val fragmentGapMax: Double = 0.6,
-    val fragmentSimDb: Double = 4.0,
-    val steadyDb: Double = 2.2,
     val strainMarginDb: Double = 6.0,
 )
 
@@ -55,14 +57,14 @@ object Detect {
             if (i + 1 >= regions.size) return false
             val (s, e) = regions[i]
             val (ns, ne) = regions[i + 1]
-            if (f.t(e - s) > cfg.fragmentMax || f.t(ns - e) > cfg.fragmentGapMax) return false
+            if (f.t(e - s) > cfg.mode.fragmentMax || f.t(ns - e) > cfg.mode.fragmentGapMax) return false
             val n = e - s
             if (ne - ns < n) return false
             val p = profile(f, s, e)
             val q = profile(f, ns, ns + n)
             var d = 0.0
             for (k in p.indices) d += abs(p[k] - q[k])
-            return d / p.size < cfg.fragmentSimDb
+            return d / p.size < cfg.mode.fragmentSimDb
         }
 
         val events = ArrayList<Event>()
@@ -82,7 +84,7 @@ object Detect {
     fun prolongations(f: Features, mask: BooleanArray, regions: List<Pair<Int, Int>>, cfg: DetectConfig): List<Event> {
         val half = 5
         val change = f.spectralChange(half)
-        val steady = BooleanArray(f.n) { change[it] < cfg.steadyDb && mask[it] }
+        val steady = BooleanArray(f.n) { change[it] < cfg.mode.steadyDb && mask[it] }
         val events = ArrayList<Event>()
         for ((s0, e0) in Vad.runs(steady)) {
             val s = maxOf(0, s0 - half)

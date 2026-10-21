@@ -46,6 +46,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/mode_full" />
+
+            <RadioButton
+                android:id="@+id/modeStrong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/mode_strong" />
         </RadioGroup>
 
         <TextView
@@ -134,6 +141,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/play_before" />
+
+            <Button
+                android:id="@+id/shareOriginal"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/share_original" />
 
             <TextView
                 android:id="@+id/details"

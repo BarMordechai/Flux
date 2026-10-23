@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">שטף</string>
-    <string name="tagline">מקליטים הודעה, האפליקציה מקצרת חסימות והפסקות ארוכות בלי לגעת במילים עצמן, ושולחים לוואטסאפ. הכל קורה על הטלפון, בלי אינטרנט.</string>
+    <string name="tagline">מקליטים הודעה, האפליקציה מזהה את המילים, מסירה חזרות והארכות ומקצרת חסימות, ושולחים לוואטסאפ. הכל קורה על הטלפון, בלי אינטרנט.</string>
     <string name="mode_gentle">עדינה</string>
     <string name="mode_full">מלאה</string>
     <string name="mode_strong">חזקה</string>
     <string name="mode_strong_hint">מקצרת כמעט כל שקט ארוך באמצע משפט. עלולה להישמע פחות טבעית.</string>
     <string name="share_original">שיתוף ההקלטה המקורית (לכיול)</string>
-    <string name="mode_gentle_hint">מקצרת רק חסימות ברורות והפסקות ארוכות מאוד.</string>
-    <string name="mode_full_hint">מקצרת חסימות והפסקות ארוכות.</string>
+    <string name="mode_gentle_hint">משאירה חזרה אחת וקצת חוסר שטף טבעי, כדי שההודעה תישמע כמוך.</string>
+    <string name="mode_full_hint">מסירה את כל החזרות שזוהו, מקצרת הארכות וחסימות.</string>
     <string name="record">הקלטה</string>
     <string name="stop">עצירה</string>
     <string name="pick_file">או לבחור קובץ שמע</string>
     <string name="reading">קורא את הקובץ…</string>
+    <string name="transcribing">מזהה את המילים… (בפעם הראשונה זה לוקח יותר)</string>
+    <string name="heard">מה שזוהה: %1$s</string>
     <string name="processing">מחליק את ההודעה…</string>
     <string name="too_short">ההקלטה קצרה מדי.</string>
     <string name="no_mic">צריך הרשאת מיקרופון כדי להקליט.</string>

@@ -169,7 +169,7 @@ object Detect {
         return events
     }
 
-    fun gaps(f: Features, regions: List<Pair<Int, Int>>, events: List<Event>, cfg: DetectConfig): List<Event> {
+    fun gaps(f: Features, regions: List<Pair<Int, Int>>, events: List<Event>, cfg: DetectConfig, words: List<Word>? = null): List<Event> {
         val out = ArrayList<Event>()
         val noise = percentile(f.energyDb, 10.0)
         val total = f.t(f.n)
@@ -194,6 +194,10 @@ object Detect {
             if (loud.toDouble() / (ns - pe) > 0.3) reasons.add("breath/strain noise")
             if (f.t(pe - ps) < 0.15) reasons.add("cut-off sound before the gap")
             if (edges.any { abs(it - a) < 0.1 || abs(it - b) < 0.1 }) reasons.add("next to another stutter event")
+            for (wd in words.orEmpty()) {
+                if (wd.start < a - 0.05 && wd.end > b + 0.05) { reasons.add("inside the word '${wd.text}'"); break }
+                if (abs(wd.end - a) < 0.15 && wd.text.trimEnd().endsWith("-")) { reasons.add("after the fragment '${wd.text}'"); break }
+            }
             if (reasons.isNotEmpty()) {
                 val k = maxOf(cfg.mode.blockKeep / 2, cfg.silenceMargin)
                 out.add(Event(Kind.BLOCK, a, b, a + k, b - k, reasons.joinToString(", ")))
@@ -205,13 +209,23 @@ object Detect {
         return out
     }
 
-    fun detect(f: Features, mask: BooleanArray, cfg: DetectConfig): List<Event> {
+    fun detect(f: Features, mask: BooleanArray, cfg: DetectConfig, words: List<Word>? = null): List<Event> {
         val regions = Vad.runs(mask)
         val events = ArrayList<Event>()
         val acoustic = acousticRepetitions(f, regions, cfg) + wordRepetitions(f, regions, cfg) +
             prolongations(f, mask, regions, cfg)
         if (cfg.acousticSpeechCuts) events += acoustic
-        events += gaps(f, regions, acoustic, cfg)
+        if (words != null) {
+            // Grounded in recognised words, so safe to cut. CTC character times are spikes, not onsets:
+            // snap each cut edge to the quietest point just before the word it sits on.
+            for (e in Transcript.repetitions(words, cfg.mode)) {
+                val a = Transcript.snapDown(f, e.cutStart, -0.15, 0.0)
+                val b = Transcript.snapDown(f, e.cutEnd, -0.25, -0.01)
+                events += e.copy(cutStart = a, cutEnd = maxOf(a, b))
+            }
+            events += Transcript.prolongations(words, f, mask, cfg.mode)
+        }
+        events += gaps(f, regions, acoustic + events, cfg, words)
         return events.sortedBy { it.start }
     }
 }

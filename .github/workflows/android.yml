@@ -20,6 +20,28 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # The on-device Hebrew CTC model is exported from Hugging Face at build time (too big for git).
+      - name: Cache exported model
+        id: model
+        uses: actions/cache@v4
+        with:
+          path: |
+            android/app/src/main/assets/ctc.onnx
+            android/app/src/main/assets/ctc.json
+          key: ctc-${{ hashFiles('tools/export_onnx.py', 'fluency/ctc.py') }}
+
+      - uses: actions/setup-python@v5
+        if: steps.model.outputs.cache-hit != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Export model to ONNX
+        if: steps.model.outputs.cache-hit != 'true'
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install transformers onnx onnxruntime numpy
+          python tools/export_onnx.py --out android/app/src/main/assets
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.11.1"

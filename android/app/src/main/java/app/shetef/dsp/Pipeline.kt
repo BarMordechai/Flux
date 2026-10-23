@@ -6,12 +6,18 @@ object Pipeline {
         fun count(kind: Kind) = events.count { it.kind == kind }
     }
 
-    fun process(x: FloatArray, sr: Int, mode: Mode = Mode.GENTLE, cfg: DetectConfig = DetectConfig(mode = mode)): Result {
+    fun process(
+        x: FloatArray,
+        sr: Int,
+        mode: Mode = Mode.GENTLE,
+        cfg: DetectConfig = DetectConfig(mode = mode),
+        words: List<Word>? = null,
+    ): Result {
         val peak = x.maxOfOrNull { kotlin.math.abs(it) } ?: 0f
         if (peak < 1e-4f) return Result(x, sr, emptyList())
         val f = Features.compute(x, sr)
         val mask = Vad.energy(f)
-        val events = Detect.detect(f, mask, cfg.copy(mode = mode))
+        val events = Detect.detect(f, mask, cfg.copy(mode = mode), words)
         val edited = Edit.applyCuts(x, sr, events.map { it.cutStart to it.cutEnd })
         return Result(edited.audio, sr, events)
     }

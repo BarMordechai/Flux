@@ -18,10 +18,12 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.content.FileProvider
 import app.shetef.audio.AudioIo
+import app.shetef.audio.CtcModel
 import app.shetef.audio.Recorder
 import app.shetef.dsp.Kind
 import app.shetef.dsp.Mode
 import app.shetef.dsp.Pipeline
+import app.shetef.dsp.Word
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.Executors
@@ -32,6 +34,8 @@ class MainActivity : Activity() {
     private var recorder: Recorder? = null
     private var mode = Mode.GENTLE
     private var input: FloatArray? = null
+    @Volatile private var words: List<Word>? = null // worker thread only
+    @Volatile private var wordsFor: FloatArray? = null
     private var originalFile: File? = null
     private var outputFile: File? = null
     private var player: MediaPlayer? = null
@@ -182,17 +186,24 @@ class MainActivity : Activity() {
             try {
                 val dir = File(cacheDir, "shared").apply { mkdirs(); listFiles()?.forEach { it.delete() } }
                 val orig = File(dir, "original.wav").also { AudioIo.writeWav(x, AudioIo.SR, it) }
-                val res = Pipeline.process(x, AudioIo.SR, m)
+                if (wordsFor !== x) { // transcribe once per message; switching modes reuses it
+                    ui.post { status.setText(R.string.transcribing) }
+                    words = CtcModel.get(this)?.transcribe(x)
+                    wordsFor = x
+                    ui.post { status.setText(R.string.processing) }
+                }
+                val ws = words
+                val res = Pipeline.process(x, AudioIo.SR, m, words = ws)
                 val out = File(dir, "voice-message-${System.currentTimeMillis() / 1000}.m4a")
                 AudioIo.encodeM4a(res.audio, res.sr, out)
-                ui.post { show(res, x.size, orig, out) }
+                ui.post { show(res, x.size, orig, out, ws) }
             } catch (e: Exception) {
                 ui.post { status.text = getString(R.string.process_failed, e.message ?: "") }
             }
         }
     }
 
-    private fun show(res: Pipeline.Result, inSamples: Int, orig: File, out: File) {
+    private fun show(res: Pipeline.Result, inSamples: Int, orig: File, out: File, ws: List<Word>?) {
         originalFile = orig
         outputFile = out
         val parts = listOf(
@@ -205,9 +216,11 @@ class MainActivity : Activity() {
         val after = res.audio.size.toDouble() / res.sr
         summary.text = if (parts.isEmpty()) getString(R.string.nothing_found)
         else getString(R.string.summary, parts.joinToString(" · "), fmt(before), fmt(after))
-        details.text = res.events.filter { it.kind != Kind.EDGE }.joinToString("\n") {
+        val lines = res.events.filter { it.kind != Kind.EDGE }.map {
             getString(R.string.event_line, getString(label(it.kind)), fmt(it.start), fmt(it.end))
         }
+        val heard = ws?.let { getString(R.string.heard, it.joinToString(" ") { w -> w.text }) }
+        details.text = (lines + listOfNotNull(heard)).joinToString("\n")
         status.text = ""
         result.visibility = View.VISIBLE
     }

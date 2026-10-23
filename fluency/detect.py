@@ -274,7 +274,14 @@ def transcript_prolongations(words: list[Word], f: feat.Features, mask: np.ndarr
     prev_end = 0.0
     for w in words:
         spans = w.chars or []
-        stretches = [(prev_end, spans[0][1], w.text[:1])] if spans else []
+        stretches = []
+        if spans:
+            # Before the first character: from where the current stretch of continuous speech began.
+            fb = min(f.frame(spans[0][1]), len(mask))
+            fa = fb
+            while fa > 0 and mask[fa - 1]:
+                fa -= 1
+            stretches.append((max(prev_end, f.t(fa)), spans[0][1], w.text[:1]))
         stretches += [(a[2], b[1], a[0]) for a, b in zip(spans, spans[1:])]
         for a, b, ch in stretches:
             fa, fb = f.frame(a), f.frame(b)

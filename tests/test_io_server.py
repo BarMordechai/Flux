@@ -25,8 +25,8 @@ def test_api_process():
     r = client.post("/api/process", files={"file": ("m.ogg", data, "audio/ogg")}, data={"mode": "full"})
     assert r.status_code == 200
     rep = r.json()["report"]
-    assert rep["counts"].get("prolongation") == 1
-    assert rep["output_seconds"] < rep["original_seconds"] - 1.0
+    assert "prolongation" not in rep["counts"]  # acoustic speech cuts are off by default
+    assert rep["output_seconds"] < rep["original_seconds"] - 0.5  # leading/trailing silence trimmed
 
 
 def test_api_rejects_garbage():

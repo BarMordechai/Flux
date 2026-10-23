@@ -11,6 +11,11 @@ from synth import SR, W1, W2, W3, fricative, join, silence, syllable, vowel
 GAP = 0.09  # normal gap between words
 
 
+def cutting(mode):
+    """Settings with the (off by default) acoustic speech cuts switched on."""
+    return Settings(mode=mode, vad="energy", detect=DetectConfig(acoustic_speech_cuts=True))
+
+
 def kinds(res):
     return [e.kind for e in res.events if e.kind != "edge"]
 
@@ -43,7 +48,7 @@ def test_long_pause_is_shortened():
 def test_fricative_prolongation_is_shortened():
     # "ssssss-amir": a 0.9 s held fricative before the word
     x = join(silence(0.2), W1(), silence(GAP), fricative(0.9, (4000, 7000)), W2(), silence(0.2))
-    res = process(x, SR, Settings(mode="full", vad="energy"))
+    res = process(x, SR, cutting("full"))
     assert "prolongation" in kinds(res)
     removed = len(x) / SR - len(res.audio) / SR
     assert 0.6 < removed < 0.9
@@ -51,7 +56,7 @@ def test_fricative_prolongation_is_shortened():
 
 def test_vowel_prolongation_is_shortened():
     x = join(silence(0.2), W1(), silence(GAP), vowel("a", 1.0, f0=(130, 130)), W3(), silence(0.2))
-    res = process(x, SR, Settings(mode="full", vad="energy"))
+    res = process(x, SR, cutting("full"))
     assert "prolongation" in kinds(res)
 
 
@@ -69,10 +74,10 @@ def test_sound_repetition_is_merged():
     frag = lambda: syllable((1000, 2500), "o", dur=0.12)  # noqa: E731
     x = join(silence(0.2), W1(), silence(GAP), frag(), silence(0.18), frag(), silence(0.18), frag(), silence(0.18),
              W2(), silence(0.2))
-    full = process(x, SR, Settings(mode="full", vad="energy"))
+    full = process(x, SR, cutting("full"))
     assert "repetition" in kinds(full)
     assert len(x) / SR - len(full.audio) / SR > 0.85
-    gentle = process(x, SR, Settings(mode="gentle", vad="energy"))
+    gentle = process(x, SR, cutting("gentle"))
     assert "repetition" in kinds(gentle)
     assert len(gentle.audio) > len(full.audio)  # gentle leaves one repetition
 
@@ -118,6 +123,19 @@ def test_pipeline_uses_transcript_for_word_repetitions():
 
 def test_whole_word_repetition_without_transcript():
     x = join(silence(0.2), W1(), silence(0.15), W1(), silence(0.15), W2(), silence(GAP), W3(), silence(0.2))
-    res = process(x, SR, Settings(mode="full", vad="energy"))
+    res = process(x, SR, cutting("full"))
     assert "repetition" in kinds(res)
     assert abs((len(x) - len(res.audio)) / SR - (len(W1()) / SR + 0.15)) < 0.05
+
+
+@pytest.mark.parametrize("mode", ["gentle", "full", "strong"])
+def test_default_never_removes_speech(mode):
+    # Every stutter kind at once; by default only silence may be removed, so all speech samples survive.
+    frag = lambda: syllable((1000, 2500), "o", dur=0.12)  # noqa: E731
+    speech = [W1(), W1(), fricative(0.9, (4000, 7000)), frag(), frag(), W2(), vowel("a", 1.0, f0=(130, 130)), W3()]
+    gaps = [silence(0.15), silence(0.15), silence(0.0), silence(0.18), silence(0.18), silence(1.2), silence(0.0)]
+    x = join(silence(0.5), *[p for pair in zip(speech, gaps + [silence(0.5)]) for p in pair])
+    res = process(x, SR, Settings(mode=mode, vad="energy"))
+    assert all(e.kind in ("block", "pause", "edge") for e in res.events)
+    speech_seconds = sum(len(p) for p in speech) / SR
+    assert len(res.audio) / SR >= speech_seconds

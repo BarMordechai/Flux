@@ -34,6 +34,10 @@ data class DetectConfig(
     val mode: Mode = Mode.GENTLE,
     val edgeKeep: Double = 0.25,
     val strainMarginDb: Double = 6.0,
+    // Acoustic repetition/prolongation detection cannot tell a stutter from a real word reliably (testers heard
+    // whole words cut), so by default it only informs block detection and nothing it finds is removed.
+    val acousticSpeechCuts: Boolean = false,
+    val silenceMargin: Double = 0.08, // never cut closer than this to detected speech (s)
 )
 
 object Detect {
@@ -191,10 +195,10 @@ object Detect {
             if (f.t(pe - ps) < 0.15) reasons.add("cut-off sound before the gap")
             if (edges.any { abs(it - a) < 0.1 || abs(it - b) < 0.1 }) reasons.add("next to another stutter event")
             if (reasons.isNotEmpty()) {
-                val k = cfg.mode.blockKeep / 2
+                val k = maxOf(cfg.mode.blockKeep / 2, cfg.silenceMargin)
                 out.add(Event(Kind.BLOCK, a, b, a + k, b - k, reasons.joinToString(", ")))
             } else if (dur > cfg.mode.pauseMax) {
-                val k = cfg.mode.pauseKeep / 2
+                val k = maxOf(cfg.mode.pauseKeep / 2, cfg.silenceMargin)
                 out.add(Event(Kind.PAUSE, a, b, a + k, b - k, "long pause shortened"))
             }
         }
@@ -204,10 +208,10 @@ object Detect {
     fun detect(f: Features, mask: BooleanArray, cfg: DetectConfig): List<Event> {
         val regions = Vad.runs(mask)
         val events = ArrayList<Event>()
-        events += acousticRepetitions(f, regions, cfg)
-        events += wordRepetitions(f, regions, cfg)
-        events += prolongations(f, mask, regions, cfg)
-        events += gaps(f, regions, events, cfg)
+        val acoustic = acousticRepetitions(f, regions, cfg) + wordRepetitions(f, regions, cfg) +
+            prolongations(f, mask, regions, cfg)
+        if (cfg.acousticSpeechCuts) events += acoustic
+        events += gaps(f, regions, acoustic, cfg)
         return events.sortedBy { it.start }
     }
 }

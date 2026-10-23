@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">שטף</string>
-    <string name="tagline">מקליטים הודעה, האפליקציה מחליקה חזרות, הארכות וחסימות בקול שלך, ושולחים לוואטסאפ. הכל קורה על הטלפון, בלי אינטרנט.</string>
+    <string name="tagline">מקליטים הודעה, האפליקציה מקצרת חסימות והפסקות ארוכות בלי לגעת במילים עצמן, ושולחים לוואטסאפ. הכל קורה על הטלפון, בלי אינטרנט.</string>
     <string name="mode_gentle">עדינה</string>
     <string name="mode_full">מלאה</string>
     <string name="mode_strong">חזקה</string>
-    <string name="mode_strong_hint">תופסת יותר, ומקצרת עוד יותר את השקטים. עלולה להישמע פחות טבעית.</string>
+    <string name="mode_strong_hint">מקצרת כמעט כל שקט ארוך באמצע משפט. עלולה להישמע פחות טבעית.</string>
     <string name="share_original">שיתוף ההקלטה המקורית (לכיול)</string>
-    <string name="mode_gentle_hint">משאירה מעט חוסר שטף טבעי, כדי שההודעה תישמע כמוך.</string>
-    <string name="mode_full_hint">מסירה כמה שיותר חזרות, הארכות וחסימות.</string>
+    <string name="mode_gentle_hint">מקצרת רק חסימות ברורות והפסקות ארוכות מאוד.</string>
+    <string name="mode_full_hint">מקצרת חסימות והפסקות ארוכות.</string>
     <string name="record">הקלטה</string>
     <string name="stop">עצירה</string>
     <string name="pick_file">או לבחור קובץ שמע</string>

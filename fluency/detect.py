@@ -47,6 +47,10 @@ MODES = {
 class DetectConfig:
     mode: str = "gentle"
     edge_keep: float = 0.25  # silence kept at the start/end of the message (s)
+    # Acoustic repetition/prolongation detectors cannot tell a stutter from a real word reliably (users heard whole
+    # words cut), so by default they only inform block detection and nothing they find is removed.
+    acoustic_speech_cuts: bool = False
+    silence_margin: float = 0.08  # never cut closer than this to detected speech (s), protects soft word edges
     strain_margin_db: float = 6.0  # level above the noise floor that marks breath/strain noise
     allowed_doubles: set = field(
         default_factory=lambda: {"לאט", "מאוד", "כן", "לא", "עוד", "יותר", "very", "no", "yes", "bye", "ביי"}
@@ -300,21 +304,20 @@ def gaps(f: feat.Features, mask, regions, events, words, cfg: DetectConfig) -> l
                 reasons.append(f"after the fragment '{wd.text}'")
                 break
         if reasons:
-            k = cfg.m.block_keep / 2
+            k = max(cfg.m.block_keep / 2, cfg.silence_margin)
             out.append(Event("block", a, b, (a + k, b - k), "acoustic", ", ".join(reasons)))
         elif dur > cfg.m.pause_max:
-            k = cfg.m.pause_keep / 2
+            k = max(cfg.m.pause_keep / 2, cfg.silence_margin)
             out.append(Event("pause", a, b, (a + k, b - k), "acoustic", "long pause shortened"))
     return out
 
 
 def detect(x: np.ndarray, sr: int, mask: np.ndarray, f: feat.Features, words: list[Word] | None, cfg: DetectConfig):
     regions = runs(mask)
-    events = acoustic_repetitions(f, regions, cfg)
-    events += word_repetitions(f, regions, cfg)
-    events += prolongations(f, mask, regions, cfg)
+    acoustic = acoustic_repetitions(f, regions, cfg) + word_repetitions(f, regions, cfg) + prolongations(f, mask, regions, cfg)
+    events = list(acoustic) if cfg.acoustic_speech_cuts else []
     if words:
-        events += transcript_repetitions(words, cfg)
-    events += gaps(f, mask, regions, events, words, cfg)
+        events += transcript_repetitions(words, cfg)  # grounded in recognised words, so safe to cut
+    events += gaps(f, mask, regions, acoustic + events, words, cfg)
     events.sort(key=lambda e: e.start)
     return events

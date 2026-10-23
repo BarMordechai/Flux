@@ -22,6 +22,7 @@ class Word:
     start: float
     end: float
     prob: float = 1.0
+    chars: list | None = None  # [(char, start_s, end_s)] when the transcriber provides them (CTC)
 
 
 class Transcriber:
@@ -49,11 +50,19 @@ class Transcriber:
         ]
 
 
-def load_transcriber(model: str | None) -> Transcriber | None:
-    """Return a Transcriber, or None when transcription is disabled or faster-whisper is missing."""
+def load_transcriber(model: str | None):
+    """Return a transcriber, or None when transcription is disabled or its library is missing.
+
+    "ctc" (or a wav2vec2 model id prefixed with "ctc:") gives verbatim CTC transcription, which word-guided
+    editing needs; anything else is a faster-whisper model name.
+    """
     if not model or model == "none":
         return None
     try:
+        if model == "ctc" or model.startswith("ctc:"):
+            from .ctc import DEFAULT_MODEL, CtcTranscriber
+
+            return CtcTranscriber(model[4:] if model.startswith("ctc:") else DEFAULT_MODEL)
         return Transcriber(model)
     except ImportError:
         return None

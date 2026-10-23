@@ -1,0 +1,43 @@
+name: Evaluate word-guided editing (Hebrew)
+
+on:
+  workflow_dispatch:
+    inputs:
+      n:
+        description: "How many FLEURS Hebrew utterances"
+        default: "80"
+
+permissions:
+  contents: write
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update -q && sudo apt-get install -yq ffmpeg
+      - run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install transformers numpy
+      - name: Evaluate
+        run: python tools/eval_hebrew_synthetic.py --n "${{ inputs.n }}" --out report
+      - run: cat report/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Save report to the calibration-reports branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898900+github-actions[bot]@users.noreply.github.com"
+          dir="reports/hebrew-run-${{ github.run_number }}"
+          mkdir -p "/tmp/$dir" && cp -r report/* "/tmp/$dir/"
+          git fetch origin calibration-reports || true
+          if git rev-parse --verify origin/calibration-reports >/dev/null 2>&1; then
+            git checkout -B calibration-reports origin/calibration-reports
+          else
+            git checkout --orphan calibration-reports && git rm -rfq .
+          fi
+          mkdir -p "$dir" && cp -r "/tmp/$dir"/* "$dir/"
+          git add reports && git commit -qm "Hebrew evaluation, run ${{ github.run_number }}"
+          git push origin calibration-reports

@@ -6,7 +6,7 @@ conservative: cutting fluent speech is far worse for the user than leaving a stu
 
 import bisect
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 
@@ -265,6 +265,35 @@ def transcript_repetitions(words: list[Word], cfg: DetectConfig) -> list[Event]:
     return events
 
 
+def transcript_prolongations(words: list[Word], f: feat.Features, mask: np.ndarray, cfg: DetectConfig) -> list[Event]:
+    """Held sounds from CTC character timing: a long stretch of continuous speech with no new character.
+
+    Covers "ssss-shalom" before a word's first character and "sha-aaaa-lom" between two characters.
+    """
+    events = []
+    prev_end = 0.0
+    for w in words:
+        spans = w.chars or []
+        stretches = [(prev_end, spans[0][1], w.text[:1])] if spans else []
+        stretches += [(a[2], b[1], a[0]) for a, b in zip(spans, spans[1:])]
+        for a, b, ch in stretches:
+            fa, fb = f.frame(a), f.frame(b)
+            if b - a < cfg.m.prolong_min + 0.1 or fb <= fa or not mask[fa:fb].all():
+                continue  # short, or a silence/pause in between: not a held sound
+            k = cfg.m.prolong_keep / 2
+            events.append(Event("prolongation", a, b, (a + 0.05 + k, b - k), "transcript", f"held '{ch}' in '{w.text}'"))
+        prev_end = w.end
+    return events
+
+
+def _snap_down(f: feat.Features, t: float, lo: float, hi: float) -> float:
+    """Time of the quietest frame in [t+lo, t+hi]: moves a word-based cut point into the dip between sounds."""
+    a, b = max(0, f.frame(t + lo)), min(f.n, f.frame(t + hi) + 1)
+    if b <= a:
+        return t
+    return f.t(a + int(np.argmin(f.energy_db[a:b])))
+
+
 def gaps(f: feat.Features, mask, regions, events, words, cfg: DetectConfig) -> list[Event]:
     """Classify every silence: edge trim, block (compress hard) or natural pause (compress only if long)."""
     out = []
@@ -317,7 +346,13 @@ def detect(x: np.ndarray, sr: int, mask: np.ndarray, f: feat.Features, words: li
     acoustic = acoustic_repetitions(f, regions, cfg) + word_repetitions(f, regions, cfg) + prolongations(f, mask, regions, cfg)
     events = list(acoustic) if cfg.acoustic_speech_cuts else []
     if words:
-        events += transcript_repetitions(words, cfg)  # grounded in recognised words, so safe to cut
+        # Grounded in recognised words, so safe to cut. CTC character times are spikes, not onsets: snap each
+        # cut edge to the quietest point just before the word it sits on.
+        for e in transcript_repetitions(words, cfg):
+            a = _snap_down(f, e.cut[0], -0.15, 0.0)
+            b = _snap_down(f, e.cut[1], -0.25, -0.01)
+            events.append(replace(e, cut=(a, max(a, b))))
+        events += transcript_prolongations(words, f, mask, cfg)
     events += gaps(f, mask, regions, acoustic + events, words, cfg)
     events.sort(key=lambda e: e.start)
     return events

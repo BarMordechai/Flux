@@ -121,8 +121,10 @@ object Transcript {
         val a = maxOf(0, f.frame(t + lo))
         val b = minOf(f.n, f.frame(t + hi) + 1)
         if (b <= a) return t
+        var min = f.energyDb[a]
+        for (i in a until b) min = minOf(min, f.energyDb[i])
         var best = a
-        for (i in a until b) if (f.energyDb[i] < f.energyDb[best]) best = i
+        for (i in a until b) if (f.energyDb[i] <= min + 3.0) best = i // the quiet frame nearest the word
         return f.t(best)
     }
 }

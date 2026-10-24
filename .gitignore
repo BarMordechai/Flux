@@ -8,5 +8,3 @@ android/app/build/
 android/local.properties
 *.apk
 .idea/
-android/app/src/main/assets/ctc.onnx
-android/app/src/main/assets/ctc.json

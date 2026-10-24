@@ -359,7 +359,9 @@ def _snap_down(f: feat.Features, t: float, lo: float, hi: float) -> float:
     a, b = max(0, f.frame(t + lo)), min(f.n, f.frame(t + hi) + 1)
     if b <= a:
         return t
-    return f.t(a + int(np.argmin(f.energy_db[a:b])))
+    e = f.energy_db[a:b]
+    quiet = np.flatnonzero(e <= e.min() + 3.0)  # all frames about as quiet as the dip...
+    return f.t(a + int(quiet[-1]))  # ...and take the one nearest the word, so little else is cut
 
 
 def gaps(f: feat.Features, mask, regions, events, words, cfg: DetectConfig) -> list[Event]:

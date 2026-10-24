@@ -13,7 +13,9 @@
     <string name="stop">עצירה</string>
     <string name="pick_file">או לבחור קובץ שמע</string>
     <string name="reading">קורא את הקובץ…</string>
-    <string name="transcribing">מזהה את המילים… (בפעם הראשונה זה לוקח יותר)</string>
+    <string name="sending">שולח לעיבוד ומזהה את המילים…</string>
+    <string name="server_waking">השרת מתעורר, זה לוקח עד כמה דקות בפעם הראשונה…</string>
+    <string name="offline_note">אין חיבור לשרת, אז רק קוצרו שקטים. המילים לא נגעו.</string>
     <string name="heard">מה שזוהה: %1$s</string>
     <string name="processing">מחליק את ההודעה…</string>
     <string name="too_short">ההקלטה קצרה מדי.</string>

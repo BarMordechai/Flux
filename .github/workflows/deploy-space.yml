@@ -1,0 +1,24 @@
+name: Deploy server (Hugging Face Space)
+
+on:
+  push:
+    branches: [main]
+    paths: ["fluency/**", "space/**", "web/**", "requirements.txt", "tools/deploy_space.py"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install huggingface_hub
+      - name: Deploy
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          FLUENCY_API_KEY: ${{ secrets.FLUENCY_API_KEY || 'shetef-mvp-3f9c1a' }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then echo "HF_TOKEN secret is not set; skipping"; exit 0; fi
+          python tools/deploy_space.py | tee -a "$GITHUB_STEP_SUMMARY"

@@ -33,3 +33,17 @@ def test_api_rejects_garbage():
     client = TestClient(app)
     r = client.post("/api/process", files={"file": ("x.ogg", b"not audio", "audio/ogg")})
     assert r.status_code == 415
+
+
+def test_api_process_all_and_key(monkeypatch):
+    client = TestClient(app)
+    data = audio_io.encode(sample(), SR, "ogg")
+    r = client.post("/api/process_all", files={"file": ("m.ogg", data, "audio/ogg")})
+    assert r.status_code == 200
+    j = r.json()
+    assert set(j["results"]) == {"gentle", "full", "strong"} and j["mime"] == "audio/mp4"
+    assert len(audio_io.decode(__import__("base64").b64decode(j["results"]["full"]["audio"]))) > SR
+    monkeypatch.setenv("FLUENCY_API_KEY", "k")
+    assert client.post("/api/process_all", files={"file": ("m.ogg", data, "audio/ogg")}).status_code == 401
+    ok = client.post("/api/process_all", files={"file": ("m.ogg", data, "audio/ogg")}, headers={"X-Api-Key": "k"})
+    assert ok.status_code == 200

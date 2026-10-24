@@ -18,12 +18,11 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.content.FileProvider
 import app.shetef.audio.AudioIo
-import app.shetef.audio.CtcModel
+import app.shetef.audio.CloudClient
 import app.shetef.audio.Recorder
 import app.shetef.dsp.Kind
 import app.shetef.dsp.Mode
 import app.shetef.dsp.Pipeline
-import app.shetef.dsp.Word
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.Executors
@@ -34,8 +33,8 @@ class MainActivity : Activity() {
     private var recorder: Recorder? = null
     private var mode = Mode.GENTLE
     private var input: FloatArray? = null
-    @Volatile private var words: List<Word>? = null // worker thread only
-    @Volatile private var wordsFor: FloatArray? = null
+    @Volatile private var cloud: CloudClient.Response? = null // worker thread only
+    @Volatile private var cloudFor: FloatArray? = null
     private var originalFile: File? = null
     private var outputFile: File? = null
     private var player: MediaPlayer? = null
@@ -176,6 +175,16 @@ class MainActivity : Activity() {
         }
     }
 
+    /** What one smoothing produced, from the server or from on-device silence shortening. */
+    private class Outcome(
+        val file: File,
+        val counts: Map<Kind, Int>,
+        val events: List<Triple<Kind, Double, Double>>,
+        val outSeconds: Double,
+        val transcript: String?,
+        val note: Int? = null,
+    )
+
     private fun smooth(x: FloatArray) {
         stopPlayback()
         input = x
@@ -184,44 +193,84 @@ class MainActivity : Activity() {
         val m = mode
         worker.execute {
             try {
-                val dir = File(cacheDir, "shared").apply { mkdirs(); listFiles()?.forEach { it.delete() } }
-                val orig = File(dir, "original.wav").also { AudioIo.writeWav(x, AudioIo.SR, it) }
-                if (wordsFor !== x) { // transcribe once per message; switching modes reuses it
-                    ui.post { status.setText(R.string.transcribing) }
-                    words = CtcModel.get(this)?.transcribe(x)
-                    wordsFor = x
-                    ui.post { status.setText(R.string.processing) }
+                val dir = File(cacheDir, "shared").apply { mkdirs() }
+                if (cloudFor !== x) { // new message: send it once, every mode comes back
+                    dir.listFiles()?.forEach { it.delete() }
+                    val orig = File(dir, "original.wav").also { AudioIo.writeWav(x, AudioIo.SR, it) }
+                    originalFile = orig
+                    cloud = if (CloudClient.enabled) {
+                        ui.post { status.setText(R.string.sending) }
+                        try {
+                            CloudClient.processAll(orig) { ui.post { status.setText(R.string.server_waking) } }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    } else null
+                    cloudFor = x
                 }
-                val ws = words
-                val res = Pipeline.process(x, AudioIo.SR, m, words = ws)
-                val out = File(dir, "voice-message-${System.currentTimeMillis() / 1000}.m4a")
-                AudioIo.encodeM4a(res.audio, res.sr, out)
-                ui.post { show(res, x.size, orig, out, ws) }
+                val outcome = cloud?.results?.get(m.name.lowercase())?.let { fromCloud(it, dir, cloud?.transcript, m) }
+                    ?: local(x, m, dir)
+                ui.post { show(outcome, x.size) }
             } catch (e: Exception) {
                 ui.post { status.text = getString(R.string.process_failed, e.message ?: "") }
             }
         }
     }
 
-    private fun show(res: Pipeline.Result, inSamples: Int, orig: File, out: File, ws: List<Word>?) {
-        originalFile = orig
-        outputFile = out
+    private fun kindOf(s: String) = when (s) {
+        "repetition" -> Kind.REPETITION
+        "prolongation" -> Kind.PROLONGATION
+        "block" -> Kind.BLOCK
+        "pause" -> Kind.PAUSE
+        else -> Kind.EDGE
+    }
+
+    private fun fromCloud(r: CloudClient.ModeResult, dir: File, transcript: String?, m: Mode): Outcome {
+        val file = File(dir, "voice-message-${m.name.lowercase()}-${System.currentTimeMillis() / 1000}.m4a")
+        file.writeBytes(r.audio)
+        val counts = HashMap<Kind, Int>()
+        val c = r.report.getJSONObject("counts")
+        for (k in c.keys()) counts[kindOf(k)] = c.getInt(k)
+        val ev = r.report.getJSONArray("events")
+        val events = List(ev.length()) {
+            val e = ev.getJSONObject(it)
+            Triple(kindOf(e.getString("kind")), e.getDouble("start"), e.getDouble("end"))
+        }
+        return Outcome(file, counts, events, r.report.getDouble("output_seconds"), transcript)
+    }
+
+    /** Offline fallback: only silences are shortened, words are never touched. */
+    private fun local(x: FloatArray, m: Mode, dir: File): Outcome {
+        val res = Pipeline.process(x, AudioIo.SR, m)
+        val file = File(dir, "voice-message-local-${System.currentTimeMillis() / 1000}.m4a")
+        AudioIo.encodeM4a(res.audio, res.sr, file)
+        return Outcome(
+            file,
+            Kind.values().associateWith { res.count(it) },
+            res.events.map { Triple(it.kind, it.start, it.end) },
+            res.audio.size.toDouble() / res.sr,
+            null,
+            R.string.offline_note,
+        )
+    }
+
+    private fun show(o: Outcome, inSamples: Int) {
+        outputFile = o.file
         val parts = listOf(
             Kind.REPETITION to R.string.k_repetition,
             Kind.PROLONGATION to R.string.k_prolongation,
             Kind.BLOCK to R.string.k_block,
             Kind.PAUSE to R.string.k_pause,
-        ).mapNotNull { (k, label) -> res.count(k).takeIf { it > 0 }?.let { "${getString(label)}: $it" } }
+        ).mapNotNull { (k, label) -> (o.counts[k] ?: 0).takeIf { it > 0 }?.let { "${getString(label)}: $it" } }
         val before = inSamples.toDouble() / AudioIo.SR
-        val after = res.audio.size.toDouble() / res.sr
         summary.text = if (parts.isEmpty()) getString(R.string.nothing_found)
-        else getString(R.string.summary, parts.joinToString(" · "), fmt(before), fmt(after))
-        val lines = res.events.filter { it.kind != Kind.EDGE }.map {
-            getString(R.string.event_line, getString(label(it.kind)), fmt(it.start), fmt(it.end))
+        else getString(R.string.summary, parts.joinToString(" · "), fmt(before), fmt(o.outSeconds))
+        val lines = o.events.filter { it.first != Kind.EDGE }.map {
+            getString(R.string.event_line, getString(label(it.first)), fmt(it.second), fmt(it.third))
         }
-        val heard = ws?.let { getString(R.string.heard, it.joinToString(" ") { w -> w.text }) }
+        val heard = o.transcript?.let { getString(R.string.heard, it) }
         details.text = (lines + listOfNotNull(heard)).joinToString("\n")
-        status.text = ""
+        status.text = o.note?.let { getString(it) } ?: ""
         result.visibility = View.VISIBLE
     }
 

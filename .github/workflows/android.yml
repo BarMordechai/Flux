@@ -20,27 +20,16 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      # The on-device Hebrew CTC model is exported from Hugging Face at build time (too big for git).
-      - name: Cache exported model
-        id: model
-        uses: actions/cache@v4
-        with:
-          path: |
-            android/app/src/main/assets/ctc.onnx
-            android/app/src/main/assets/ctc.json
-          key: ctc-${{ hashFiles('tools/export_onnx.py', 'fluency/ctc.py') }}
-
-      - uses: actions/setup-python@v5
-        if: steps.model.outputs.cache-hit != 'true'
-        with:
-          python-version: "3.12"
-
-      - name: Export model to ONNX
-        if: steps.model.outputs.cache-hit != 'true'
+      # Point the app at the processing server (the Hugging Face Space of the HF_TOKEN owner).
+      - name: Server URL
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          pip install torch --index-url https://download.pytorch.org/whl/cpu
-          pip install transformers onnx onnxruntime numpy
-          python tools/export_onnx.py --out android/app/src/main/assets
+          if [ -n "$HF_TOKEN" ]; then
+            user=$(curl -sf -H "Authorization: Bearer $HF_TOKEN" https://huggingface.co/api/whoami-v2 | python3 -c "import json,sys;print(json.load(sys.stdin)['name'])")
+            echo "SHETEF_SERVER_URL=https://$(echo "$user" | tr 'A-Z_' 'a-z-')-shetef.hf.space" >> "$GITHUB_ENV"
+          fi
+          echo "SHETEF_API_KEY=${{ secrets.FLUENCY_API_KEY || 'shetef-mvp-3f9c1a' }}" >> "$GITHUB_ENV"
 
       - uses: gradle/actions/setup-gradle@v4
         with:

@@ -36,6 +36,7 @@ def encode(x: np.ndarray, sr: int = SR, fmt: str = "ogg") -> bytes:
         "ogg": ["-c:a", "libopus", "-b:a", "32k", "-application", "voip", "-f", "ogg"],
         "wav": ["-c:a", "pcm_s16le", "-f", "wav"],
         "mp3": ["-c:a", "libmp3lame", "-b:a", "64k", "-f", "mp3"],
+        "m4a": ["-c:a", "aac", "-b:a", "48k", "-movflags", "frag_keyframe+empty_moov", "-f", "mp4"],
     }[fmt]
     pcm = np.clip(x, -1.0, 1.0).astype(np.float32).tobytes()
     return _ffmpeg(["-f", "f32le", "-ar", str(sr), "-ac", "1", "-i", "pipe:0", *codec, "pipe:1"], pcm)

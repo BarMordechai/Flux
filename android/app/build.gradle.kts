@@ -15,6 +15,13 @@ android {
         targetSdk = 35
         versionCode = buildNumber
         versionName = "0.1.$buildNumber"
+        // The processing server (a Hugging Face Space); CI fills it in. Empty = offline only.
+        buildConfigField("String", "SERVER_URL", "\"${System.getenv("SHETEF_SERVER_URL") ?: ""}\"")
+        buildConfigField("String", "API_KEY", "\"${System.getenv("SHETEF_API_KEY") ?: "shetef-mvp-3f9c1a"}\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     signingConfigs {
@@ -38,10 +45,6 @@ android {
         }
     }
 
-    androidResources {
-        noCompress += "onnx"
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -53,6 +56,5 @@ android {
 
 dependencies {
     implementation("androidx.core:core:1.13.1")
-    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.20.0")
     testImplementation("junit:junit:4.13.2")
 }

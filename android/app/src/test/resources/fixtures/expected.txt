@@ -20,11 +20,11 @@ sound_repetition gentle 39360 -
 sound_repetition full 39360 -
 sound_repetition strong 39360 -
 t_word_repetition gentle 33280 -
-t_word_repetition full 24400 repetition
-t_word_repetition strong 24400 repetition
+t_word_repetition full 23407 repetition
+t_word_repetition strong 23407 repetition
 t_fragment gentle 19680 -
-t_fragment full 14673 repetition
-t_fragment strong 14321 repetition,block
+t_fragment full 13393 repetition
+t_fragment strong 13393 repetition,block
 t_prolongation gentle 26641 prolongation
 t_prolongation full 25234 prolongation
 t_prolongation strong 24848 prolongation

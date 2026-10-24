@@ -53,6 +53,11 @@ class DetectConfig:
     # A transcript repetition is only cut if the removed audio really sounds like the word that is kept (DTW
     # distance below this); guards against the recogniser hallucinating a repeat. 0 disables the check.
     verify_repetition_db: float = 4.5
+    # Anchored repetitions: speech chunks just before a recognised word that sound like that word's onset.
+    # Whisper writes the word once even when it was said 2-3 times, so the copies have to be found in the audio,
+    # but only right before a known word and never across another recognised word. 0 disables.
+    anchored_dtw_db: float = 3.5
+    anchored_lookback: float = 1.5
     silence_margin: float = 0.08  # never cut closer than this to detected speech (s), protects soft word edges
     strain_margin_db: float = 6.0  # level above the noise floor that marks breath/strain noise
     allowed_doubles: set = field(
@@ -296,6 +301,45 @@ def transcript_prolongations(words: list[Word], f: feat.Features, mask: np.ndarr
     return events
 
 
+def anchored_repetitions(words: list[Word], f: feat.Features, mask: np.ndarray, cfg: DetectConfig) -> list[Event]:
+    if cfg.anchored_dtw_db <= 0:
+        return []
+    regions = runs(mask)
+    events = []
+    for i, w in enumerate(words):
+        lo = max(words[i - 1].end if i else 0.0, w.start - cfg.anchored_lookback)
+        chunks = [(max(s, f.frame(lo)), e) for s, e in regions if f.t(e) > lo and f.t(s) < w.end]
+        chunks = [(s, e) for s, e in chunks if e - s >= 5]
+        if len(chunks) < 2:
+            continue
+        target = chunks[-1]
+        others = [x for j, x in enumerate(words) if j != i]
+        copies = []
+        for s, e in reversed(chunks[:-1]):
+            nxt = copies[0] if copies else target
+            if f.t(nxt[0] - e) > 0.8 or f.t(e - s) > 1.0:
+                break
+            if any(o.start < f.t(e) and o.end > f.t(s) for o in others):
+                break  # that chunk is another recognised word, never touch it
+            n = e - s
+            b_end = min(target[1], target[0] + int(1.4 * n) + 1)
+            if b_end - target[0] < int(0.7 * n) or dtw_distance(f.logmel[s:e], f.logmel[target[0]:b_end]) >= cfg.anchored_dtw_db:
+                break
+            copies.insert(0, (s, e))
+        if not copies:
+            continue
+        if cfg.m.keep_one_repetition:
+            if len(copies) < 2:
+                continue
+            cut_to = copies[-1][0]
+        else:
+            cut_to = target[0]
+        a = f.t(copies[0][0])
+        events.append(Event("repetition", a, f.t(target[0]), (a, f.t(cut_to)), "transcript",
+                            f"{len(copies)} repeat(s) of '{w.text}'"))
+    return events
+
+
 def _sounds_repeated(f: feat.Features, mask: np.ndarray, a: float, b: float, max_db: float) -> bool:
     """Does the speech in [a, b) match the speech that follows b? (the copy we drop vs. the word we keep)"""
     fa, fb = f.frame(a), f.frame(b)
@@ -377,6 +421,9 @@ def detect(x: np.ndarray, sr: int, mask: np.ndarray, f: feat.Features, words: li
             if cfg.verify_repetition_db > 0 and not _sounds_repeated(f, mask, a, b, cfg.verify_repetition_db):
                 continue
             events.append(replace(e, cut=(a, max(a, b))))
+        for e in anchored_repetitions(words, f, mask, cfg):
+            if not any(x.kind == "repetition" and x.cut[0] < e.cut[1] and e.cut[0] < x.cut[1] for x in events):
+                events.append(e)
         events += transcript_prolongations(words, f, mask, cfg)
     events += gaps(f, mask, regions, acoustic + events, words, cfg)
     events.sort(key=lambda e: e.start)

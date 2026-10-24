@@ -108,11 +108,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=80)
     ap.add_argument("--out", default="report")
+    ap.add_argument("--asr", default="ctc", help="ctc | whisper:<faster-whisper model id>")
     a = ap.parse_args()
     out = Path(a.out)
     (out / "examples").mkdir(parents=True, exist_ok=True)
 
-    ctc = CtcTranscriber()
+    ctc = CtcTranscriber()  # positions the inserted stutters
+    if a.asr.startswith("whisper:"):
+        from fluency.transcribe import Transcriber
+
+        asr = Transcriber(a.asr[8:], device="cpu", compute_type="int8")
+    else:
+        asr = ctc
     data = load_fleurs(a.n)
     print(f"loaded {len(data)} FLEURS utterances", flush=True)
     stats = {m: {"inserted": {k: 0.0 for k in KINDS}, "removed": {k: 0.0 for k in KINDS},
@@ -124,9 +131,9 @@ def main():
         # Which inserted samples belong to which kind, in order of insertion.
         runs_ = np.flatnonzero(np.diff(np.concatenate([[0], ins.astype(int), [0]])))
         spans = list(zip(runs_[::2], runs_[1::2]))
-        y_words = ctc(y, SR)
+        y_words = asr(y, SR)
         sp_y, sp_x = speech_mask(y), speech_mask(x)
-        clean_words = words
+        clean_words = asr(x, SR) if asr is not ctc else words
         for mode in stats:
             res = process(y, SR, Settings(mode=mode, vad="energy"), transcriber=lambda *_: y_words)
             rem = removed_mask(len(y), res.events)
@@ -146,7 +153,7 @@ def main():
         print(f"{idx + 1}/{len(data)} {labels} real-cut(full)={stats['full']['real_cut_s'][-1]:.3f}s", flush=True)
 
     lines = ["# Hebrew word-guided editing (FLEURS he_il + inserted stutters)", "",
-             f"{len(data)} utterances, 2 stutters inserted in each. Model: CTC wav2vec2 Hebrew.", "",
+             f"{len(data)} utterances, 2 stutters inserted in each. Recogniser: {a.asr}.", "",
              "| mode | " + " | ".join(f"{k} removed" for k in KINDS)
              + " | real speech cut (stuttered input) | utterances with >50 ms real speech cut | real speech cut (fluent input) |",
              "|---|" + "---|" * (len(KINDS) + 3)]

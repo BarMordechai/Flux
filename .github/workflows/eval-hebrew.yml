@@ -6,6 +6,9 @@ on:
       n:
         description: "How many FLEURS Hebrew utterances"
         default: "80"
+      asr:
+        description: "ctc | whisper:<faster-whisper model id>"
+        default: "ctc"
 
 permissions:
   contents: write
@@ -22,15 +25,15 @@ jobs:
       - run: sudo apt-get update -q && sudo apt-get install -yq ffmpeg
       - run: |
           pip install torch --index-url https://download.pytorch.org/whl/cpu
-          pip install transformers numpy
+          pip install transformers numpy faster-whisper
       - name: Evaluate
-        run: python tools/eval_hebrew_synthetic.py --n "${{ inputs.n }}" --out report
+        run: python tools/eval_hebrew_synthetic.py --n "${{ inputs.n }}" --asr "${{ inputs.asr }}" --out report
       - run: cat report/summary.md >> "$GITHUB_STEP_SUMMARY"
       - name: Save report to the calibration-reports branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898900+github-actions[bot]@users.noreply.github.com"
-          dir="reports/hebrew-run-${{ github.run_number }}"
+          dir="reports/hebrew-run-${{ github.run_number }}-$(echo '${{ inputs.asr }}' | tr -c 'a-zA-Z0-9-' '_')"
           mkdir -p "/tmp/$dir" && cp -r report/* "/tmp/$dir/"
           git fetch origin calibration-reports || true
           if git rev-parse --verify origin/calibration-reports >/dev/null 2>&1; then

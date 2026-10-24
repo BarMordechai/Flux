@@ -50,6 +50,9 @@ class DetectConfig:
     # Acoustic repetition/prolongation detectors cannot tell a stutter from a real word reliably (users heard whole
     # words cut), so by default they only inform block detection and nothing they find is removed.
     acoustic_speech_cuts: bool = False
+    # A transcript repetition is only cut if the removed audio really sounds like the word that is kept (DTW
+    # distance below this); guards against the recogniser hallucinating a repeat. 0 disables the check.
+    verify_repetition_db: float = 4.5
     silence_margin: float = 0.08  # never cut closer than this to detected speech (s), protects soft word edges
     strain_margin_db: float = 6.0  # level above the noise floor that marks breath/strain noise
     allowed_doubles: set = field(
@@ -293,6 +296,19 @@ def transcript_prolongations(words: list[Word], f: feat.Features, mask: np.ndarr
     return events
 
 
+def _sounds_repeated(f: feat.Features, mask: np.ndarray, a: float, b: float, max_db: float) -> bool:
+    """Does the speech in [a, b) match the speech that follows b? (the copy we drop vs. the word we keep)"""
+    fa, fb = f.frame(a), f.frame(b)
+    idx = np.flatnonzero(mask[fa:fb]) + fa
+    if len(idx) < 5:
+        return True  # nothing audible is removed, only silence
+    n = len(idx)
+    after = np.flatnonzero(mask[fb : min(f.n, fb + 3 * n + 50)]) + fb
+    if len(after) < int(0.7 * n):
+        return False
+    return dtw_distance(f.logmel[idx], f.logmel[after[: int(1.4 * n) + 1]]) < max_db
+
+
 def _snap_down(f: feat.Features, t: float, lo: float, hi: float) -> float:
     """Time of the quietest frame in [t+lo, t+hi]: moves a word-based cut point into the dip between sounds."""
     a, b = max(0, f.frame(t + lo)), min(f.n, f.frame(t + hi) + 1)
@@ -358,6 +374,8 @@ def detect(x: np.ndarray, sr: int, mask: np.ndarray, f: feat.Features, words: li
         for e in transcript_repetitions(words, cfg):
             a = _snap_down(f, e.cut[0], -0.15, 0.0)
             b = _snap_down(f, e.cut[1], -0.25, -0.01)
+            if cfg.verify_repetition_db > 0 and not _sounds_repeated(f, mask, a, b, cfg.verify_repetition_db):
+                continue
             events.append(replace(e, cut=(a, max(a, b))))
         events += transcript_prolongations(words, f, mask, cfg)
     events += gaps(f, mask, regions, acoustic + events, words, cfg)

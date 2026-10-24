@@ -56,7 +56,7 @@ class DetectConfig:
     # Anchored repetitions: speech chunks just before a recognised word that sound like that word's onset.
     # Whisper writes the word once even when it was said 2-3 times, so the copies have to be found in the audio,
     # but only right before a known word and never across another recognised word. 0 disables.
-    anchored_dtw_db: float = 3.5
+    anchored_dtw_db: float = 2.5
     anchored_lookback: float = 1.5
     silence_margin: float = 0.08  # never cut closer than this to detected speech (s), protects soft word edges
     strain_margin_db: float = 6.0  # level above the noise floor that marks breath/strain noise
@@ -242,11 +242,12 @@ def transcript_repetitions(words: list[Word], cfg: DetectConfig) -> list[Event]:
         fragment = words[i].text.rstrip().endswith("-") or len(w[i]) == 1
         if fragment and w[i + 1].startswith(w[i]) and w[i] != w[i + 1]:
             links[i] = i + 1
-        elif w[i] == w[i + 1] and w[i] not in cfg.allowed_doubles:
+        elif w[i] == w[i + 1] and w[i] not in cfg.allowed_doubles and not w[i].isdigit():
             links[i] = i + 1
         else:
             for n in (3, 2):
-                if i + 2 * n <= len(w) and w[i : i + n] == w[i + n : i + 2 * n] and all(w[i : i + n]):
+                if (i + 2 * n <= len(w) and w[i : i + n] == w[i + n : i + 2 * n] and all(w[i : i + n])
+                        and not any(x.isdigit() for x in w[i : i + n])):
                     links[i] = i + n
                     break
         i += 1
@@ -319,8 +320,8 @@ def anchored_repetitions(words: list[Word], f: feat.Features, mask: np.ndarray, 
             nxt = copies[0] if copies else target
             if f.t(nxt[0] - e) > 0.8 or f.t(e - s) > 1.0:
                 break
-            if any(o.start < f.t(e) and o.end > f.t(s) for o in others):
-                break  # that chunk is another recognised word, never touch it
+            if any(o.start < f.t(e) and o.end + 0.1 > f.t(s) for o in others):
+                break  # that chunk is (or touches) another recognised word, never touch it
             n = e - s
             b_end = min(target[1], target[0] + int(1.4 * n) + 1)
             if b_end - target[0] < int(0.7 * n) or dtw_distance(f.logmel[s:e], f.logmel[target[0]:b_end]) >= cfg.anchored_dtw_db:
